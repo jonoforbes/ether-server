@@ -6,7 +6,7 @@ var clientDocumentSchema = new mongoose.Schema({
     accountId: String,
     contactId: String,
     saleId: String,
-    embedUrl: String,
+    boxFileId: String,
     userId: String,
     createdAt: Date
 });

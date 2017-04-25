@@ -8,7 +8,7 @@ var clientDocumentSchema: Schema = new mongoose.Schema({
     accountId: String,
     contactId: String,
     saleId: String,
-    embedUrl: String,
+    boxFileId: String,
     userId: String, 
     createdAt: Date
 })
@@ -22,7 +22,7 @@ interface IClientDocument {
     accountId: String,
     contactId: String,
     saleId: String,
-    embedUrl: String,
+    boxFileId: String,
     userId: String, 
     createdAt: Date
 }
