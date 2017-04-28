@@ -12,6 +12,8 @@ var contactSchema: Schema = new mongoose.Schema({
     mobilePhone: String,
     homePhone: String,
     workPhone: String,
+    primaryEmail: String,
+    secondaryEmail: String,
     accountId: String,
     userId: String,
     createdAt: Date
@@ -30,6 +32,8 @@ interface IContact {
     mobilePhone: String;
     homePhone: String;
     workPhone: String;
+    primaryEmail: String;
+    secondaryEmail: String;
     accountId: String;
     userId: String;
     createdAt: Date;

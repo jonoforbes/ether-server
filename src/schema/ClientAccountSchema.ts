@@ -5,6 +5,8 @@ import { Schema } from "mongoose";
 var clientAccountSchema: Schema = new mongoose.Schema({
     accountName: String,
     accountStatus: String,
+    companyFullName: String,
+    companyNumber: String,
     createdAt: Date,
     userId: String
 })
@@ -12,6 +14,8 @@ var clientAccountSchema: Schema = new mongoose.Schema({
 interface IClientAccount {
     accountName: String;
     accountStatus: String;
+    companyFullName: String;
+    companyNumber: String;
     createdAt: Date;
     userId: String;
 }
