@@ -11,7 +11,8 @@ var userDataSchema = new mongoose.Schema({
     mobilePhone: String,
     homePhone: String,
     workPhone: String,
-    userId: String
+    userId: String,
+    createdAt: Date
 });
 exports.UserData = mongoose.model("UserData", userDataSchema);
 //# sourceMappingURL=UserDataSchema.js.map

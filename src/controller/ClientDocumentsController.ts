@@ -4,8 +4,10 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { ClientDocument } from "../schema/ClientDocumentSchema";
+import { User } from "../schema/UserSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
+import { getBoxUserAPIClient } from "../box-api";
 var jwt: any = require("jsonwebtoken");
 
 const DATA_CLIENT_DOCUMENTS_ADD: string = "DATA_CLIENT_DOCUMENTS_ADD";
@@ -31,6 +33,33 @@ export class ClientDocumentsController {
         });
     }
 
+    @Get("/admin")
+    public getAdmin(@Req() req: Request, @Res() res: Response): void {
+        let userId: string = handleAuth(req, res);
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return
+            }
+            else {
+                ClientDocument.find({_id: {'$ne': null}}, (error: any, clientDocuments: any) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(clientDocuments);
+
+                })
+                
+            }
+        })
+        
+    }
+
     @Get("/:id")
     public getById(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
@@ -41,6 +70,32 @@ export class ClientDocumentsController {
             }
             res.send(docs[0]);
         });
+    }
+
+    @Put("/:id/sign")
+    public putSign(@Req() req: Request, @Res() res: Response): void {
+        let userId: string = handleAuth(req, res);
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            else {
+                let boxUserId = docs[0].boxUserId;
+                let options = {};
+                getBoxUserAPIClient(boxUserId).content.files.get(req.body.boxFileId, options, function(err, data) {
+                    if (err) {
+                        res.send(err);
+                        return;
+                    }
+                    else {
+                        console.log(data);
+                        return;
+                    }
+                })
+            }
+        })
+
     }
 
     @Post("/")

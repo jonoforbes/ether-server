@@ -12,7 +12,8 @@ var contactSchema = new mongoose.Schema({
     homePhone: String,
     workPhone: String,
     accountId: String,
-    userId: String
+    userId: String,
+    createdAt: Date
 });
 exports.Contact = mongoose.model("Contact", contactSchema);
 //# sourceMappingURL=ContactSchema.js.map

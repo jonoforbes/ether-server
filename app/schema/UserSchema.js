@@ -7,7 +7,8 @@ let userSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     password: { type: String, required: true },
-    boxUserId: String
+    boxUserId: String,
+    role: String
 });
 exports.User = mongoose.model("User", userSchema);
 userSchema.pre("save", function (next) {

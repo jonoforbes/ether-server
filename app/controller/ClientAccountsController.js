@@ -13,6 +13,7 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const ClientAccountSchema_1 = require("../schema/ClientAccountSchema");
+const UserSchema_1 = require("../schema/UserSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -35,6 +36,28 @@ let ClientAccountsController = class ClientAccountsController {
                 console.log('setting accounts');
                 res.send(clientAccounts);
                 return;
+            }
+        });
+    }
+    getAdmin(req, res) {
+        let userId = auth_1.handleAuth(req, res);
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return;
+            }
+            else {
+                ClientAccountSchema_1.ClientAccount.find({ _id: { '$ne': null } }, (error, clientAccounts) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(clientAccounts);
+                });
             }
         });
     }
@@ -112,6 +135,11 @@ __decorate([
     __param(0, Params_1.Req()),
     __param(1, Params_1.Res())
 ], ClientAccountsController.prototype, "get", null);
+__decorate([
+    Methods_1.Get("/admin"),
+    __param(0, Params_1.Req()),
+    __param(1, Params_1.Res())
+], ClientAccountsController.prototype, "getAdmin", null);
 __decorate([
     Methods_1.Get("/:id"),
     __param(0, Params_1.Req()),

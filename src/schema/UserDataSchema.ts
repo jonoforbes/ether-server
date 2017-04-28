@@ -12,7 +12,8 @@ var userDataSchema: Schema = new mongoose.Schema({
     mobilePhone: String,
     homePhone: String,
     workPhone: String,
-    userId: String
+    userId: String,
+    createdAt: Date
 })
 export var UserData: Model<IUserDataModel> = mongoose.model<IUserDataModel>("UserData", userDataSchema);
 export interface IUserDataModel extends IUserData, mongoose.Document {
@@ -29,4 +30,5 @@ export interface IUserData {
     homePhone: String;
     workPhone: String;
     userId: String;
+    createdAt: Date;
 }

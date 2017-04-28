@@ -13,7 +13,8 @@ var contactSchema: Schema = new mongoose.Schema({
     homePhone: String,
     workPhone: String,
     accountId: String,
-    userId: String
+    userId: String,
+    createdAt: Date
 })
 export var Contact: Model<IContactModel> = mongoose.model<IContactModel>("Contact", contactSchema);
 interface IContactModel extends IContact, mongoose.Document {
@@ -31,4 +32,5 @@ interface IContact {
     workPhone: String;
     accountId: String;
     userId: String;
+    createdAt: Date;
 }

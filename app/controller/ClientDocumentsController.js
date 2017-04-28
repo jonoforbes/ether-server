@@ -13,8 +13,10 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const ClientDocumentSchema_1 = require("../schema/ClientDocumentSchema");
+const UserSchema_1 = require("../schema/UserSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
+const box_api_1 = require("../box-api");
 var jwt = require("jsonwebtoken");
 const DATA_CLIENT_DOCUMENTS_ADD = "DATA_CLIENT_DOCUMENTS_ADD";
 const DATA_CLIENT_DOCUMENTS_REMOVE = "DATA_CLIENT_DOCUMENTS_REMOVE";
@@ -34,6 +36,28 @@ let ClientDocumentsController = class ClientDocumentsController {
             res.send(clientDocuments);
         });
     }
+    getAdmin(req, res) {
+        let userId = auth_1.handleAuth(req, res);
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return;
+            }
+            else {
+                ClientDocumentSchema_1.ClientDocument.find({ _id: { '$ne': null } }, (error, clientDocuments) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(clientDocuments);
+                });
+            }
+        });
+    }
     getById(req, res) {
         let userId = auth_1.handleAuth(req, res);
         ClientDocumentSchema_1.ClientDocument.find({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, (error, docs) => {
@@ -42,6 +66,29 @@ let ClientDocumentsController = class ClientDocumentsController {
                 return;
             }
             res.send(docs[0]);
+        });
+    }
+    putSign(req, res) {
+        let userId = auth_1.handleAuth(req, res);
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            else {
+                let boxUserId = docs[0].boxUserId;
+                let options = {};
+                box_api_1.getBoxUserAPIClient(boxUserId).content.files.get(req.body.boxFileId, options, function (err, data) {
+                    if (err) {
+                        res.send(err);
+                        return;
+                    }
+                    else {
+                        console.log(data);
+                        return;
+                    }
+                });
+            }
         });
     }
     post(req, res) {
@@ -102,10 +149,20 @@ __decorate([
     __param(1, Params_1.Res())
 ], ClientDocumentsController.prototype, "get", null);
 __decorate([
+    Methods_1.Get("/admin"),
+    __param(0, Params_1.Req()),
+    __param(1, Params_1.Res())
+], ClientDocumentsController.prototype, "getAdmin", null);
+__decorate([
     Methods_1.Get("/:id"),
     __param(0, Params_1.Req()),
     __param(1, Params_1.Res())
 ], ClientDocumentsController.prototype, "getById", null);
+__decorate([
+    Methods_1.Put("/:id/sign"),
+    __param(0, Params_1.Req()),
+    __param(1, Params_1.Res())
+], ClientDocumentsController.prototype, "putSign", null);
 __decorate([
     Methods_1.Post("/"),
     __param(0, Params_1.Req()),
