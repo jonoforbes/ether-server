@@ -20,7 +20,7 @@ export class AuthenticationController {
 
     @Post("/register")
     public register(@Req()req: Request, @Res() res: Response): void {
-        console.log(req.body);
+        // console.log(req.body);
         var userId: string = '';
         var boxUserId: string = '';
         var userData: Object = req.body;
@@ -36,7 +36,7 @@ export class AuthenticationController {
                 };
 			    boxUserId = data.id;
                 req.body.boxUserId = boxUserId;
-                console.log(boxUserId);
+                // console.log(boxUserId);
                 new User(req.body).save((error: any, user: IUserModel) => {
                     if (error) {
                         console.log(error);
@@ -73,9 +73,9 @@ export class AuthenticationController {
                 return;
             }
             let user: IUserModel = resp[0];
-            console.log('user', user);
-            console.log('req password', req.body.password);
-            console.log('user password', user.password);
+            // console.log('user', user);
+            // console.log('req password', req.body.password);
+            // console.log('user password', user.password);
             bcrypt.compare(req.body.password, user.password, (errC: any, isMatch: boolean) => {
                 if (!isMatch) {
                     res.status(400).send({error: "Wrong Username/password combination"});
@@ -91,8 +91,8 @@ export class AuthenticationController {
                 boxAdminAPIClient._session.tokenManager.getTokensJWTGrant('user', user.boxUserId, function (err, accesstokenInfo) {
 
                     boxAccessToken = accesstokenInfo.accessToken;
-                    console.log('box access token', boxAccessToken);
-                console.log('box user id', user.boxUserId);
+                //     console.log('box access token', boxAccessToken);
+                // console.log('box user id', user.boxUserId);
                 res.send({
                     token: token, 
                     login: user.login, 
@@ -100,7 +100,8 @@ export class AuthenticationController {
                     lastName: user.lastName, 
                     boxUserId: user.boxUserId, 
                     boxAccessToken: boxAccessToken,
-                    userId: user._id
+                    userId: user._id,
+                    role: user.role
                     });
                 });
                 
