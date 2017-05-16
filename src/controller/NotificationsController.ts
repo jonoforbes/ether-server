@@ -38,21 +38,28 @@ export class NotificationsController {
     }
     
     public post(@Req() req: any, notificationType: String): void {
-        console.log('notification body', req.body);
-        console.log('notification', req);
-        // if (notificationType == 'message') {
-        //     console.log('notification for a message');
-        //     UserData.find({userId: req.body.userId}, (error: any, docs: any) => {
-        //         if (error) {
-        //             return;
-        //         }
-        //         else {
-        //             var notificationContent = `${docs[0].firstName} sent you a message`;
-        //             console.log(notificationContent);
-        //             return;
-        //         }
-        //     });            
-        // }
+        // console.log('notification body', req.body);
+        // console.log('notification', req);
+        if (notificationType == 'message') {
+            console.log('notification for a message');
+            UserData.find({userId: req.userId}, (error: any, docs: any) => {
+                if (error) {
+                    return;
+                }
+                else {
+                    var notificationHeader = `${docs[0].firstName} sent you a message`;
+                    var notificationBody = {
+                        header: notificationHeader,
+                        content: req.content,
+                        userId: req.recipientId,
+                        messageId: req._id,
+                        seen: false
+                    };
+                    console.log(notificationBody);
+                    return;
+                }
+            });            
+        }
         if (notificationType == 'task') {
             console.log('notification for a task');
             return;
