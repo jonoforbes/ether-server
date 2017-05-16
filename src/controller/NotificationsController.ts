@@ -4,6 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { Notification } from "../schema/NotificationSchema";
+import { UserData } from "../schema/UserDataSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 var jwt: any = require("jsonwebtoken");
@@ -40,7 +41,17 @@ export class NotificationsController {
         console.log('notification body', req.body);
         if (notificationType == 'message') {
             console.log('notification for a message');
-            return;
+            UserData.find({userId: req.body.userId}, (error: any, docs: any) => {
+                if (error) {
+                    res.send(error);
+                    return;
+                }
+                else {
+                    var notificationContent = `${docs[0].firstName} sent you a message`;
+                    console.log(notificationContent);
+                    return;
+                }
+            });            
         }
         if (notificationType == 'task') {
             console.log('notification for a task');
