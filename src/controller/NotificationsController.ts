@@ -35,8 +35,7 @@ export class NotificationsController {
                 }
             });
     }
-
-    @Post("/")
+    
     public post(@Req() req: Request, @Res() res: Response, notificationType: String): void {
         console.log('notification body', req.body);
         if (notificationType == 'message') {
@@ -46,6 +45,9 @@ export class NotificationsController {
         if (notificationType == 'task') {
             console.log('notification for a task');
             return;
+        }
+        else {
+            console.log('no notification type');
         }
     }
 }

@@ -16,7 +16,7 @@ const DATA_MESSAGES_ADD_ALL: string ="DATA_MESSAGES_ADD_ALL";
 
 @JsonController("/api/messages")
 export class MessagesController {
-    constructor(private notificationsController: NotificationsController) {
+    constructor(public notificationsController: NotificationsController) {
     }
 
     @Get("/")
@@ -85,7 +85,9 @@ export class MessagesController {
             else {
                 this.handleRt(userId, recipientId, req, {type: DATA_MESSAGES_ADD, payload: {message: response}});
                 res.send(response);
+                
                 this.notificationsController.post(req, res, 'message');
+                console.log('notification sent from message controller');
             }
             
         });
