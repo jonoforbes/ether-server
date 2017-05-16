@@ -37,7 +37,6 @@ export class NotificationsController {
             });
     }
     
-    @Post("/")
     public post(@Req() req: any, notificationType: String): void {
         // console.log('notification body', req.body);
         // console.log('notification', req);
@@ -62,7 +61,7 @@ export class NotificationsController {
                             console.log('error', error);
                         }
                         else {
-                            this.handleRt(req.recipientId, {type: DATA_NOTIFICATIONS_ADD, payload: {notification: response}});
+                            console.log('notification added', response);
                         }
                     })
                     return;
@@ -75,12 +74,15 @@ export class NotificationsController {
         }
     }
 
-    private handleRt(userId: string, action: {type: string, payload: any}): void {
+    private handleRt(userId: string, req: Request, action: {type: string, payload: any}): void {
 
         if(!clientIdsMap[userId]) {
             return;
         }
         clientIdsMap[userId]
+            .filter((clientInfo: {clientId: string, jwtToken: string}) => {
+                return clientInfo.jwtToken !== getToken(req);
+            })
             .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });

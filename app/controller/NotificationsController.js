@@ -60,7 +60,7 @@ let NotificationsController = class NotificationsController {
                             console.log('error', error);
                         }
                         else {
-                            this.handleRt(req.recipientId, { type: DATA_NOTIFICATIONS_ADD, payload: { notification: response } });
+                            console.log('notification added', response);
                         }
                     });
                     return;
@@ -72,11 +72,14 @@ let NotificationsController = class NotificationsController {
             return;
         }
     }
-    handleRt(userId, action) {
+    handleRt(userId, req, action) {
         if (!index_1.clientIdsMap[userId]) {
             return;
         }
         index_1.clientIdsMap[userId]
+            .filter((clientInfo) => {
+            return clientInfo.jwtToken !== auth_1.getToken(req);
+        })
             .forEach((clientInfo) => {
             index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
         });
@@ -88,7 +91,6 @@ __decorate([
     __param(1, Params_1.Res())
 ], NotificationsController.prototype, "get", null);
 __decorate([
-    Methods_1.Post("/"),
     __param(0, Params_1.Req())
 ], NotificationsController.prototype, "post", null);
 NotificationsController = __decorate([
