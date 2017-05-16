@@ -13,7 +13,6 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const NotificationSchema_1 = require("../schema/NotificationSchema");
-const UserDataSchema_1 = require("../schema/UserDataSchema");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
 const DATA_NOTIFICATIONS_ADD = "DATA_NOTIFICATIONS_ADD";
@@ -37,28 +36,12 @@ let NotificationsController = class NotificationsController {
             }
         });
     }
-    post(req, res, notificationType) {
+    post(req, notificationType) {
         console.log('notification body', req.body);
-        if (notificationType == 'message') {
-            console.log('notification for a message');
-            UserDataSchema_1.UserData.find({ userId: req.body.userId }, (error, docs) => {
-                if (error) {
-                    res.send(error);
-                    return;
-                }
-                else {
-                    var notificationContent = `${docs[0].firstName} sent you a message`;
-                    console.log(notificationContent);
-                    return;
-                }
-            });
-        }
+        console.log('notification', req);
         if (notificationType == 'task') {
             console.log('notification for a task');
             return;
-        }
-        else {
-            console.log('no notification type');
         }
     }
 };
@@ -68,8 +51,7 @@ __decorate([
     __param(1, Params_1.Res())
 ], NotificationsController.prototype, "get", null);
 __decorate([
-    __param(0, Params_1.Req()),
-    __param(1, Params_1.Res())
+    __param(0, Params_1.Req())
 ], NotificationsController.prototype, "post", null);
 NotificationsController = __decorate([
     Controllers_1.JsonController("api/notifications")
