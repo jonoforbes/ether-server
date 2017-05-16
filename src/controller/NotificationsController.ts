@@ -37,6 +37,7 @@ export class NotificationsController {
             });
     }
     
+    @Post("/")
     public post(@Req() req: any, notificationType: String): void {
         // console.log('notification body', req.body);
         // console.log('notification', req);

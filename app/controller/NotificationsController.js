@@ -88,6 +88,7 @@ __decorate([
     __param(1, Params_1.Res())
 ], NotificationsController.prototype, "get", null);
 __decorate([
+    Methods_1.Post("/"),
     __param(0, Params_1.Req())
 ], NotificationsController.prototype, "post", null);
 NotificationsController = __decorate([
