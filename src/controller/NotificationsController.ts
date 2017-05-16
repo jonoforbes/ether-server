@@ -24,7 +24,7 @@ export class NotificationsController {
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
         let queryUserId: string = new ObjectID(userId).toString();
-        Notification.find({userId: queryUserId},
+        Notification.find({recipientId: queryUserId},
             (error: any, notifications: any) => {
                 if (error) {
                     res.send(error);
@@ -51,11 +51,19 @@ export class NotificationsController {
                     var notificationBody = {
                         header: notificationHeader,
                         content: req.content,
-                        userId: req.recipientId,
+                        recipientId: req.recipientId,
                         messageId: req._id,
                         seen: false
                     };
                     console.log(notificationBody);
+                    new Notification(notificationBody).save((error: any, response: any) => {
+                        if (error) {
+                            console.log('error', error);
+                        }
+                        else {
+                            this.handleRt(req.recipientId, {type: DATA_NOTIFICATIONS_ADD, payload: {notification: response}});
+                        }
+                    })
                     return;
                 }
             });            
@@ -64,6 +72,17 @@ export class NotificationsController {
             console.log('notification for a task');
             return;
         }
+    }
+
+    private handleRt(userId: string, action: {type: string, payload: any}): void {
+
+        if(!clientIdsMap[userId]) {
+            return;
+        }
+        clientIdsMap[userId]
+            .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
+                io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+            });
     }
 }
 

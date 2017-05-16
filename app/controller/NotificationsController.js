@@ -14,6 +14,7 @@ const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const NotificationSchema_1 = require("../schema/NotificationSchema");
 const UserDataSchema_1 = require("../schema/UserDataSchema");
+const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
 const DATA_NOTIFICATIONS_ADD = "DATA_NOTIFICATIONS_ADD";
@@ -26,7 +27,7 @@ let NotificationsController = class NotificationsController {
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
         let queryUserId = new mongodb_1.ObjectID(userId).toString();
-        NotificationSchema_1.Notification.find({ userId: queryUserId }, (error, notifications) => {
+        NotificationSchema_1.Notification.find({ recipientId: queryUserId }, (error, notifications) => {
             if (error) {
                 res.send(error);
                 return;
@@ -49,11 +50,19 @@ let NotificationsController = class NotificationsController {
                     var notificationBody = {
                         header: notificationHeader,
                         content: req.content,
-                        userId: req.recipientId,
+                        recipientId: req.recipientId,
                         messageId: req._id,
                         seen: false
                     };
                     console.log(notificationBody);
+                    new NotificationSchema_1.Notification(notificationBody).save((error, response) => {
+                        if (error) {
+                            console.log('error', error);
+                        }
+                        else {
+                            this.handleRt(req.recipientId, { type: DATA_NOTIFICATIONS_ADD, payload: { notification: response } });
+                        }
+                    });
                     return;
                 }
             });
@@ -62,6 +71,15 @@ let NotificationsController = class NotificationsController {
             console.log('notification for a task');
             return;
         }
+    }
+    handleRt(userId, action) {
+        if (!index_1.clientIdsMap[userId]) {
+            return;
+        }
+        index_1.clientIdsMap[userId]
+            .forEach((clientInfo) => {
+            index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+        });
     }
 };
 __decorate([
