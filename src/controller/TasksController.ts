@@ -4,6 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { Task } from "../schema/TaskSchema";
+import { NotificationsController } from "./NotificationsController";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 var jwt: any = require("jsonwebtoken");
@@ -15,7 +16,7 @@ const DATA_TASKS_ADD_ALL: string ="DATA_TASKS_ADD_ALL";
 
 @JsonController("/api/tasks")
 export class TasksController {
-    constructor() {
+    constructor(private notificationsController: NotificationsController) {
     }
 
     @Get("/")
@@ -84,6 +85,7 @@ export class TasksController {
             else {
                 this.handleRt(userId, recipientId, req, {type: DATA_TASKS_ADD, payload: {task: response}});
                 res.send(response);
+                this.notificationsController.post(req, res, 'task');
             }
             
         });
