@@ -21,7 +21,8 @@ const DATA_MESSAGES_REMOVE = "DATA_MESSAGE_REMOVE";
 const DATA_MESSAGES_UPDATE = "DATA_MESSAGES_UPDATE";
 const DATA_MESSAGES_ADD_ALL = "DATA_MESSAGES_ADD_ALL";
 let MessagesController = class MessagesController {
-    constructor() {
+    constructor(notificationsController) {
+        this.notificationsController = notificationsController;
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
@@ -77,6 +78,8 @@ let MessagesController = class MessagesController {
             }
             else {
                 this.handleRt(userId, recipientId, req, { type: DATA_MESSAGES_ADD, payload: { message: response } });
+                this.notificationsController.post(req, res, 'message');
+                console.log('notification sent from message controller');
                 res.send(response);
             }
         });

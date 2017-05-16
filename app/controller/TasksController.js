@@ -21,7 +21,8 @@ const DATA_TASKS_REMOVE = "DATA_TASKS_REMOVE";
 const DATA_TASKS_UPDATE = "DATA_TASKS_UPDATE";
 const DATA_TASKS_ADD_ALL = "DATA_TASKS_ADD_ALL";
 let TasksController = class TasksController {
-    constructor() {
+    constructor(notificationsController) {
+        this.notificationsController = notificationsController;
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
@@ -78,6 +79,7 @@ let TasksController = class TasksController {
             else {
                 this.handleRt(userId, recipientId, req, { type: DATA_TASKS_ADD, payload: { task: response } });
                 res.send(response);
+                this.notificationsController.post(req, res, 'task');
             }
         });
     }
