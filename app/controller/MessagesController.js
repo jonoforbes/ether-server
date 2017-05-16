@@ -13,6 +13,7 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const MessagesSchema_1 = require("../schema/MessagesSchema");
+const NotificationsController_1 = require("./NotificationsController");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -20,9 +21,9 @@ const DATA_MESSAGES_ADD = "DATA_MESSAGES_ADD";
 const DATA_MESSAGES_REMOVE = "DATA_MESSAGE_REMOVE";
 const DATA_MESSAGES_UPDATE = "DATA_MESSAGES_UPDATE";
 const DATA_MESSAGES_ADD_ALL = "DATA_MESSAGES_ADD_ALL";
+var notificationsController = new NotificationsController_1.NotificationsController;
 let MessagesController = class MessagesController {
-    constructor(notificationsController) {
-        this.notificationsController = notificationsController;
+    constructor() {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
@@ -78,7 +79,7 @@ let MessagesController = class MessagesController {
             }
             else {
                 this.handleRt(userId, recipientId, req, { type: DATA_MESSAGES_ADD, payload: { message: response } });
-                this.notificationsController.post(req, res, 'message');
+                notificationsController.post(req, res, 'message');
                 console.log('notification sent from message controller');
                 res.send(response);
             }

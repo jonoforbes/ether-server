@@ -13,10 +13,11 @@ const DATA_MESSAGES_ADD: string = "DATA_MESSAGES_ADD";
 const DATA_MESSAGES_REMOVE: string = "DATA_MESSAGE_REMOVE";
 const DATA_MESSAGES_UPDATE: string ="DATA_MESSAGES_UPDATE";
 const DATA_MESSAGES_ADD_ALL: string ="DATA_MESSAGES_ADD_ALL";
+var notificationsController: NotificationsController = new NotificationsController;
 
 @JsonController("/api/messages")
 export class MessagesController {
-    constructor(public notificationsController: NotificationsController) {
+    constructor() {
     }
 
     @Get("/")
@@ -84,7 +85,7 @@ export class MessagesController {
             }
             else {
                 this.handleRt(userId, recipientId, req, {type: DATA_MESSAGES_ADD, payload: {message: response}});
-                this.notificationsController.post(req, res, 'message');
+                notificationsController.post(req, res, 'message');
                 console.log('notification sent from message controller');
                 res.send(response);
             }
