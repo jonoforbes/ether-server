@@ -84,10 +84,9 @@ export class MessagesController {
             }
             else {
                 this.handleRt(userId, recipientId, req, {type: DATA_MESSAGES_ADD, payload: {message: response}});
-                res.send(response);
-                
                 this.notificationsController.post(req, res, 'message');
                 console.log('notification sent from message controller');
+                res.send(response);
             }
             
         });
