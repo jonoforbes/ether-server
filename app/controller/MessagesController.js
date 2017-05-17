@@ -13,7 +13,7 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const MessagesSchema_1 = require("../schema/MessagesSchema");
-const ActivityController_1 = require("./ActivityController");
+const ActivitiesController_1 = require("./ActivitiesController");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -21,7 +21,7 @@ const DATA_MESSAGES_ADD = "DATA_MESSAGES_ADD";
 const DATA_MESSAGES_REMOVE = "DATA_MESSAGE_REMOVE";
 const DATA_MESSAGES_UPDATE = "DATA_MESSAGES_UPDATE";
 const DATA_MESSAGES_ADD_ALL = "DATA_MESSAGES_ADD_ALL";
-var activityController = new ActivityController_1.ActivityController;
+var activitiesController = new ActivitiesController_1.ActivitiesController;
 let MessagesController = class MessagesController {
     constructor() {
     }

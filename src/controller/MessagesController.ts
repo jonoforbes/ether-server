@@ -4,7 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { Message } from "../schema/MessagesSchema";
-import { ActivityController } from "./ActivityController";
+import { ActivitiesController } from "./ActivitiesController";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 var jwt: any = require("jsonwebtoken");
@@ -14,7 +14,7 @@ const DATA_MESSAGES_REMOVE: string = "DATA_MESSAGE_REMOVE";
 const DATA_MESSAGES_UPDATE: string ="DATA_MESSAGES_UPDATE";
 const DATA_MESSAGES_ADD_ALL: string ="DATA_MESSAGES_ADD_ALL";
 
-var activityController: ActivityController = new ActivityController;
+var activitiesController: ActivitiesController = new ActivitiesController;
 
 @JsonController("/api/messages")
 export class MessagesController {
