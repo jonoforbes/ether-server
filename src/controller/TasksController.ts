@@ -14,9 +14,11 @@ const DATA_TASKS_REMOVE: string = "DATA_TASKS_REMOVE";
 const DATA_TASKS_UPDATE: string ="DATA_TASKS_UPDATE";
 const DATA_TASKS_ADD_ALL: string ="DATA_TASKS_ADD_ALL";
 
+var notificationsController: NotificationsController = new NotificationsController;
+
 @JsonController("/api/tasks")
 export class TasksController {
-    constructor(private notificationsController: NotificationsController) {
+    constructor() {
     }
 
     @Get("/")
@@ -84,8 +86,9 @@ export class TasksController {
             }
             else {
                 this.handleRt(userId, recipientId, req, {type: DATA_TASKS_ADD, payload: {task: response}});
+                notificationsController.post(response, 'addTask');
+                console.log('notification sent from task controller');
                 res.send(response);
-                this.notificationsController.post(req, res, 'task');
             }
             
         });
@@ -123,6 +126,7 @@ export class TasksController {
             }
             else {
                 this.handleRt(ownerId, recipientId, req, {type: DATA_TASKS_UPDATE, payload: {_id: response._id, task: req.body}});
+                notificationsController.post(response, 'completeTask');
                 res.send(response);
             }
         });

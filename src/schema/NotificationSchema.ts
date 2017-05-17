@@ -5,6 +5,7 @@ import { Schema } from "mongoose";
 var notificationSchema: Schema = new mongoose.Schema({
     header: {type: String, required: true},
     content: {type: String, required: true},
+    type: String,
     messageId: String,
     taskId: String,
     userId: String,
@@ -20,6 +21,7 @@ interface INotificationModel extends INotification, mongoose.Document {
 interface INotification {
     header: String,
     content: String,
+    type: String,
     messageId: String,
     taskId: String,
     userId: String,

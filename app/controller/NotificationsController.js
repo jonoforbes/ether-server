@@ -67,11 +67,14 @@ let NotificationsController = class NotificationsController {
                 }
             });
         }
+        ;
         if (notificationType == 'task') {
             console.log('notification for a task');
             return;
         }
+        ;
     }
+    ;
     handleRt(userId, req, action) {
         if (!index_1.clientIdsMap[userId]) {
             return;

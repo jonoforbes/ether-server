@@ -13,6 +13,7 @@ const DATA_MESSAGES_ADD: string = "DATA_MESSAGES_ADD";
 const DATA_MESSAGES_REMOVE: string = "DATA_MESSAGE_REMOVE";
 const DATA_MESSAGES_UPDATE: string ="DATA_MESSAGES_UPDATE";
 const DATA_MESSAGES_ADD_ALL: string ="DATA_MESSAGES_ADD_ALL";
+
 var notificationsController: NotificationsController = new NotificationsController;
 
 @JsonController("/api/messages")
