@@ -51,6 +51,7 @@ export class ActivitiesController {
                         content: req.content,
                         type: activityType,
                         recipientId: req.recipientId,
+                        userId: req.userId,
                         messageId: req._id,
                         createdAt: new Date(),
                         seen: false
@@ -83,6 +84,7 @@ export class ActivitiesController {
                         content: req.content,
                         type: activityType,
                         recipientId: req.recipientId,
+                        
                         taskId: req._id,
                         createdAt: new Date(),
                         seen: false
