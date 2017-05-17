@@ -22,9 +22,7 @@ export class ActivitiesController {
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        let queryUserId: string = new ObjectID(userId).toString();
-        Activity.find({recipientId: queryUserId},
-            (error: any, activities: any) => {
+        Activity.find({recipientId: new ObjectID(userId)}, (error: any, activities: any) => {
                 if (error) {
                     res.send(error);
                     return;
@@ -36,6 +34,13 @@ export class ActivitiesController {
             });
     }
     
+}
+
+
+
+
+
+
     // public post(@Req() req: any, notificationType: String): void {
     //     // console.log('notification body', req.body);
     //     // console.log('notification', req);
@@ -165,5 +170,3 @@ export class ActivitiesController {
     //             io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
     //         });
     // }
-}
-

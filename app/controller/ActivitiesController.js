@@ -24,8 +24,7 @@ let ActivitiesController = class ActivitiesController {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        let queryUserId = new mongodb_1.ObjectID(userId).toString();
-        ActivitySchema_1.Activity.find({ recipientId: queryUserId }, (error, activities) => {
+        ActivitySchema_1.Activity.find({ recipientId: new mongodb_1.ObjectID(userId) }, (error, activities) => {
             if (error) {
                 res.send(error);
                 return;
