@@ -53,6 +53,7 @@ let ActivitiesController = class ActivitiesController {
                         type: activityType,
                         recipientId: req.recipientId,
                         messageId: req._id,
+                        createdAt: new Date(),
                         seen: false
                     };
                     console.log('pres save', activityBody);
@@ -84,6 +85,7 @@ let ActivitiesController = class ActivitiesController {
                         type: activityType,
                         recipientId: req.recipientId,
                         taskId: req._id,
+                        createdAt: new Date(),
                         seen: false
                     };
                     console.log('pre save', activityBody);
@@ -116,6 +118,7 @@ let ActivitiesController = class ActivitiesController {
                         type: activityType,
                         recipientId: req.userId,
                         taskId: req._id,
+                        createdAt: new Date(),
                         seen: false
                     };
                     console.log('pre save', activityBody);
