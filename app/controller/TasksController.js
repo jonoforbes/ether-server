@@ -13,6 +13,7 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const TaskSchema_1 = require("../schema/TaskSchema");
+const NotificationsController_1 = require("./NotificationsController");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -20,9 +21,9 @@ const DATA_TASKS_ADD = "DATA_TASKS_ADD";
 const DATA_TASKS_REMOVE = "DATA_TASKS_REMOVE";
 const DATA_TASKS_UPDATE = "DATA_TASKS_UPDATE";
 const DATA_TASKS_ADD_ALL = "DATA_TASKS_ADD_ALL";
+var notificationsController = new NotificationsController_1.NotificationsController;
 let TasksController = class TasksController {
-    constructor(notificationsController) {
-        this.notificationsController = notificationsController;
+    constructor() {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
@@ -78,8 +79,9 @@ let TasksController = class TasksController {
             }
             else {
                 this.handleRt(userId, recipientId, req, { type: DATA_TASKS_ADD, payload: { task: response } });
+                notificationsController.post(response, 'addTask');
+                console.log('notification sent from task controller');
                 res.send(response);
-                this.notificationsController.post(req, res, 'task');
             }
         });
     }
@@ -111,6 +113,7 @@ let TasksController = class TasksController {
             }
             else {
                 this.handleRt(ownerId, recipientId, req, { type: DATA_TASKS_UPDATE, payload: { _id: response._id, task: req.body } });
+                notificationsController.post(response, 'completeTask');
                 res.send(response);
             }
         });

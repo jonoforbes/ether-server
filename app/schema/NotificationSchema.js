@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 var notificationSchema = new mongoose.Schema({
     header: { type: String, required: true },
     content: { type: String, required: true },
+    type: String,
     messageId: String,
     taskId: String,
     userId: String,

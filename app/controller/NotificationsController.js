@@ -43,6 +43,7 @@ let NotificationsController = class NotificationsController {
             console.log('notification for a message');
             UserDataSchema_1.UserData.find({ userId: req.userId }, (error, docs) => {
                 if (error) {
+                    console.log(error);
                     return;
                 }
                 else {
@@ -50,11 +51,12 @@ let NotificationsController = class NotificationsController {
                     var notificationBody = {
                         header: notificationHeader,
                         content: req.content,
+                        type: notificationType,
                         recipientId: req.recipientId,
                         messageId: req._id,
                         seen: false
                     };
-                    console.log(notificationBody);
+                    console.log('pres save', notificationBody);
                     new NotificationSchema_1.Notification(notificationBody).save((error, response) => {
                         if (error) {
                             console.log('error', error);
@@ -67,22 +69,91 @@ let NotificationsController = class NotificationsController {
                 }
             });
         }
-        ;
-        if (notificationType == 'task') {
-            console.log('notification for a task');
+        if (notificationType == 'addTask') {
+            console.log('notification for add task');
+            UserDataSchema_1.UserData.find({ userId: req.userId }, (error, docs) => {
+                if (error) {
+                    console.log(error);
+                    return;
+                }
+                else {
+                    var notificationHeader = `${docs[0].firstName} sent you a task`;
+                    var notificationBody = {
+                        header: notificationHeader,
+                        content: req.content,
+                        type: notificationType,
+                        recipientId: req.recipientId,
+                        taskId: req._id,
+                        seen: false
+                    };
+                    console.log('pre save', notificationBody);
+                    new NotificationSchema_1.Notification(notificationBody).save((error, response) => {
+                        if (error) {
+                            console.log('error', error);
+                            return;
+                        }
+                        else {
+                            console.log('notification added', response);
+                            return;
+                        }
+                    });
+                }
+            });
+        }
+        if (notificationType == 'completeTask') {
+            console.log('notification for complete task');
+            UserDataSchema_1.UserData.find({ userId: req.userId }, (error, docs) => {
+                if (error) {
+                    console.log(error);
+                    return;
+                }
+                else {
+                    var notificationHeader = `${docs[0].firstName} completed a task`;
+                    var notificationBody = {
+                        header: notificationHeader,
+                        content: req.content,
+                        type: notificationType,
+                        recipientId: req.userId,
+                        taskId: req._id,
+                        seen: false
+                    };
+                    console.log('pre save', notificationBody);
+                    new NotificationSchema_1.Notification(notificationBody).save((errr, response) => {
+                        if (error) {
+                            console.log('error', error);
+                            return;
+                        }
+                        else {
+                            this.handleRt(req.userId, { type: DATA_NOTIFICATIONS_UPDATE, payload: { _id: response._id, notification: notificationBody } });
+                            console.log('notification added', response);
+                            return;
+                        }
+                    });
+                }
+            });
+        }
+        else {
             return;
         }
-        ;
     }
-    ;
-    handleRt(userId, req, action) {
+    delete(req, res) {
+        let userId = auth_1.handleAuth(req, res);
+        NotificationSchema_1.Notification.remove({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, (error) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            else {
+                this.handleRt(userId, { type: DATA_NOTIFICATIONS_REMOVE, payload: { _id: req.params.id } });
+                res.sendStatus(200);
+            }
+        });
+    }
+    handleRt(userId, action) {
         if (!index_1.clientIdsMap[userId]) {
             return;
         }
         index_1.clientIdsMap[userId]
-            .filter((clientInfo) => {
-            return clientInfo.jwtToken !== auth_1.getToken(req);
-        })
             .forEach((clientInfo) => {
             index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
         });
@@ -96,6 +167,11 @@ __decorate([
 __decorate([
     __param(0, Params_1.Req())
 ], NotificationsController.prototype, "post", null);
+__decorate([
+    Methods_1.Delete("/:id"),
+    __param(0, Params_1.Req()),
+    __param(1, Params_1.Res())
+], NotificationsController.prototype, "delete", null);
 NotificationsController = __decorate([
     Controllers_1.JsonController("api/notifications")
 ], NotificationsController);
