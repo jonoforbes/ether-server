@@ -4,7 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { Message } from "../schema/MessagesSchema";
-import { NotificationsController } from "./NotificationsController";
+import { ActivityController } from "./ActivityController";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 var jwt: any = require("jsonwebtoken");
@@ -14,7 +14,7 @@ const DATA_MESSAGES_REMOVE: string = "DATA_MESSAGE_REMOVE";
 const DATA_MESSAGES_UPDATE: string ="DATA_MESSAGES_UPDATE";
 const DATA_MESSAGES_ADD_ALL: string ="DATA_MESSAGES_ADD_ALL";
 
-var notificationsController: NotificationsController = new NotificationsController;
+var activityController: ActivityController = new ActivityController;
 
 @JsonController("/api/messages")
 export class MessagesController {
@@ -86,8 +86,8 @@ export class MessagesController {
             }
             else {
                 this.handleRt(userId, recipientId, req, {type: DATA_MESSAGES_ADD, payload: {message: response}});
-                notificationsController.post(response, 'message');
-                console.log('notification sent from message controller');
+                // activityController.post(response, 'message');
+                // console.log('notification sent from message controller');
                 res.send(response);
             }
             

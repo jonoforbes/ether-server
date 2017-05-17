@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 import { Model } from "mongoose";
 import { Schema } from "mongoose";
 
-var notificationSchema: Schema = new mongoose.Schema({
+var activitySchema: Schema = new mongoose.Schema({
     header: {type: String, required: true},
     content: {type: String, required: true},
     type: String,
@@ -14,11 +14,11 @@ var notificationSchema: Schema = new mongoose.Schema({
     seen: Boolean
 })
 
-interface INotificationModel extends INotification, mongoose.Document {
+interface IActivityModel extends IActivity, mongoose.Document {
 
 }
 
-interface INotification {
+interface IActivity {
     header: String,
     content: String,
     type: String,
@@ -30,4 +30,4 @@ interface INotification {
     seen: Boolean
 }
 
-export var Notification: Model<INotificationModel> = mongoose.model<INotificationModel>("Notification", notificationSchema);
+export var Activity: Model<IActivityModel> = mongoose.model<IActivityModel>("Activity", activitySchema);

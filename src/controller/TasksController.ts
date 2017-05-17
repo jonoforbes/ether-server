@@ -4,7 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { Task } from "../schema/TaskSchema";
-import { NotificationsController } from "./NotificationsController";
+// import { NotificationsController } from "./NotificationsController";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 var jwt: any = require("jsonwebtoken");
@@ -14,7 +14,7 @@ const DATA_TASKS_REMOVE: string = "DATA_TASKS_REMOVE";
 const DATA_TASKS_UPDATE: string ="DATA_TASKS_UPDATE";
 const DATA_TASKS_ADD_ALL: string ="DATA_TASKS_ADD_ALL";
 
-var notificationsController: NotificationsController = new NotificationsController;
+// var notificationsController: NotificationsController = new NotificationsController;
 
 @JsonController("/api/tasks")
 export class TasksController {
@@ -86,8 +86,8 @@ export class TasksController {
             }
             else {
                 this.handleRt(userId, recipientId, req, {type: DATA_TASKS_ADD, payload: {task: response}});
-                notificationsController.post(response, 'addTask');
-                console.log('notification sent from task controller');
+                // notificationsController.post(response, 'addTask');
+                // console.log('notification sent from task controller');
                 res.send(response);
             }
             
@@ -126,7 +126,7 @@ export class TasksController {
             }
             else {
                 this.handleRt(ownerId, recipientId, req, {type: DATA_TASKS_UPDATE, payload: {_id: response._id, task: req.body}});
-                notificationsController.post(response, 'completeTask');
+                // notificationsController.post(response, 'completeTask');
                 res.send(response);
             }
         });
