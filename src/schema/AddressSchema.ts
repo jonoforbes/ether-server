@@ -3,6 +3,7 @@ import { Model } from "mongoose";
 import { Schema } from "mongoose";
 
 var addressSchema: Schema = new mongoose.Schema({
+    addressType: String,
     longitude: Number,
     latitude: Number,
     formattedName: String,
@@ -13,6 +14,8 @@ var addressSchema: Schema = new mongoose.Schema({
     country: String,
     contactId: String,
     accountId: String,
+    bankAccountId: String,
+    addressSince: String, 
     createdAt: Date,
     userId: String
 })
@@ -22,6 +25,7 @@ interface IAddressModel extends IAddress, mongoose.Document {
 }
 
 interface IAddress {
+    addressType: String,
     longitude: Number,
     latitude: Number,
     formattedName: String,
@@ -32,6 +36,8 @@ interface IAddress {
     country: String,
     contactId: String,
     accountId: String,
+    bankAccountId: String,
+    addressSince: Date,
     createdAt: Date,
     userId: String
 }
