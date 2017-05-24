@@ -1,0 +1,16 @@
+"use strict";
+const mongoose = require("mongoose");
+var bankAccountSchema = new mongoose.Schema({
+    accountType: String,
+    accountName: String,
+    bankName: String,
+    accountNumber: String,
+    sortCode: String,
+    swiftCode: String,
+    iban: String,
+    clientAccountId: String,
+    contactId: String,
+    userId: String,
+});
+exports.BankAccount = mongoose.model("BankAccount", bankAccountSchema);
+//# sourceMappingURL=BankAccountSchema.js.map

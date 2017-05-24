@@ -1,6 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
 var addressSchema = new mongoose.Schema({
+    addressType: String,
     longitude: Number,
     latitude: Number,
     formattedName: String,
@@ -11,6 +12,8 @@ var addressSchema = new mongoose.Schema({
     country: String,
     contactId: String,
     accountId: String,
+    bankAccountId: String,
+    addressSince: String,
     createdAt: Date,
     userId: String
 });
