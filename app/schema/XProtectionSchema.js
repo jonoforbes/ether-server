@@ -50,8 +50,8 @@ var xProtectionSchema = new mongoose.Schema({
         currency: String,
         amount: Number
     },
-    commencementDate: Date,
-    maturityDate: Date,
+    commencementDate: String,
+    maturityDate: String,
     createdAt: Date,
     contactId: String,
     accountId: String,

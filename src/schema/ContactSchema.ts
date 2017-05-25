@@ -14,7 +14,6 @@ var contactSchema: Schema = new mongoose.Schema({
     dateOfDeath: String,
     maritalStatus: String,
     gender: String,
-
     dependants: [{
         relationship: String,
         name: String,

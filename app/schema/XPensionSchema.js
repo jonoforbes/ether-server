@@ -5,18 +5,18 @@ var xPensionSchema = new mongoose.Schema({
     providerName: String,
     planType: String,
     policyNumber: String,
-    planStartDate: Date,
-    planJoinDate: Date,
-    planLeaveDate: Date,
+    planStartDate: String,
+    planJoinDate: String,
+    planLeaveDate: String,
     extraYears: Number,
-    companyJoinDate: Date,
+    companyJoinDate: String,
     status: String,
     planRetirementAge: Number,
     valuation: {
         currency: String,
-        amount: Number
+        amount: Number,
+        date: String
     },
-    valuationDate: Date,
     taxFreeCurrentValue: {
         currency: String,
         amount: Number
@@ -37,12 +37,12 @@ var xPensionSchema = new mongoose.Schema({
     deathInServiceLumpSum: String,
     assetPreservationTrust: Boolean,
     contractedOut: Boolean,
-    paidUpDate: Date,
+    paidUpDate: String,
     transferValue: {
         currency: String,
-        amount: Number
+        amount: Number,
+        date: String
     },
-    transferValueDate: Date,
     protectedRights: String,
     nonProtectedRights: String,
     pensionableEarnings: {

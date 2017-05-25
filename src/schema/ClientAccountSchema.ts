@@ -8,25 +8,22 @@ var clientAccountSchema: Schema = new mongoose.Schema({
     accountType: String,        // Personal | Corporate
     companyFullName: String,
     companyNumber: String,
-    wealthSource: {
-        income: Boolean,            // Income
-        bonus: Boolean,             // Bonus
-        houseSale: Boolean,         // Sale of House
-        businessSale: Boolean,      // Sale of Business
-        inheritance: Boolean,       // Inheritance
-        replacement: Boolean,       // Replacement
-        divorce: Boolean,           // Divorce Settlement
-        other: Boolean              // Other
-    },
-    fundsSource: {
-        euBank: Boolean,            // EU Bank Account
-        bsocAcc: Boolean,           // Banking Society Account
-        stock: Boolean,             // Stockbroker
-        otherReg: Boolean,          // Other Regulated Firm
-        solicitorAcc: Boolean,      // Solicitor's Client Account
-        accountantAcc: Boolean,     // Accountant's Client Account
-        other: Boolean              // Other
-    },
+    wealthIncome: Boolean,
+    wealthBonus: Boolean,
+    wealthHouseSale: Boolean,
+    wealthBusinessSale: Boolean,
+    wealthInheritance: Boolean,
+    wealthReplacement: Boolean,
+    wealthDivorce: Boolean,
+    wealthOther: Boolean,
+    fundsUKBank: Boolean,
+    fundsEUBank: Boolean,
+    fundsBSOC: Boolean,
+    fundsStock: Boolean,
+    fundsOtherReg: Boolean,
+    fundsSolicitor: Boolean,
+    fundsAccountant: Boolean,
+    fundsOther: Boolean,
     scddSentDate: Date,
     scddType: String,
     createdAt: Date,
@@ -36,27 +33,25 @@ var clientAccountSchema: Schema = new mongoose.Schema({
 interface IClientAccount {
     accountName: String,
     accountStatus: String,
+    accountType: String,
     companyFullName: String,
     companyNumber: String,
-    wealthSource: {
-        income: Boolean,            // Income
-        bonus: Boolean,             // Bonus
-        houseSale: Boolean,         // Sale of House
-        businessSale: Boolean,      // Sale of Business
-        inheritance: Boolean,       // Inheritance
-        replacement: Boolean,       // Replacement
-        divorce: Boolean,           // Divorce Settlement
-        other: Boolean,             // Other
-    },
-    fundsSource: {
-        euBank: Boolean,            // EU Bank Account
-        bsocAcc: Boolean,           // Banking Society Account
-        stock: Boolean,             // Stockbroker
-        otherReg: Boolean,          // Other Regulated Firm
-        solicitorAcc: Boolean,      // Solicitor's Client Account
-        accountantAcc: Boolean,     // Accountant's Client Account
-        other: Boolean,             // Other
-    },
+    wealthIncome: Boolean,
+    wealthBonus: Boolean,
+    wealthHouseSale: Boolean,
+    wealthBusinessSale: Boolean,
+    wealthInheritance: Boolean,
+    wealthReplacement: Boolean,
+    wealthDivorce: Boolean,
+    wealthOther: Boolean,
+    fundsUKBank: Boolean,
+    fundsEUBank: Boolean,
+    fundsBSOC: Boolean,
+    fundsStock: Boolean,
+    fundsOtherReg: Boolean,
+    fundsSolicitor: Boolean,
+    fundsAccountant: Boolean,
+    fundsOther: Boolean,
     scddSentDate: Date,
     scddType: String,
     createdAt: Date,

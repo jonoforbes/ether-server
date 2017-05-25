@@ -10,8 +10,9 @@ var bankAccountSchema: Schema = new mongoose.Schema({
     sortCode: String,
     swiftCode: String,
     iban: String,
-    clientAccountId: String,
+    accountId: String,
     contactId: String,
+    createdAt: Date,
     userId: String,
 
 })
@@ -24,8 +25,9 @@ interface IBankAccount {
     sortCode: String;
     swiftCode: String;
     iban: String;
-    clientAccountId: String;
+    accountId: String;
     contactId: String;
+    createdAt: Date;
     userId: String;
 }
 

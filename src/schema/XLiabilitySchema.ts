@@ -24,12 +24,12 @@ var xLiabilitySchema: Schema = new mongoose.Schema({
     rate: {
         percentage: Number,
         type: String,
-        basisEnds: Date
+        basisEnds: String
     },
     policyNumber: String,
     transferable: Boolean,
     transferPenalty: String,
-    reviewDate: Date,
+    reviewDate: String,
     startDate: String,
     contactId: String,
     accountId: String,
@@ -59,12 +59,12 @@ interface IXLiability {
     rate: {
         percentage: Number,
         type: String,
-        basisEnds: Date
+        basisEnds: String
     },
     policyNumber: String,
     transferable: Boolean,
     transferPenalty: String,
-    reviewDate: Date,
+    reviewDate: String,
     startDate: String,
     contactId: String,
     accountId: String,

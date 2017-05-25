@@ -8,8 +8,9 @@ var bankAccountSchema = new mongoose.Schema({
     sortCode: String,
     swiftCode: String,
     iban: String,
-    clientAccountId: String,
+    accountId: String,
     contactId: String,
+    createdAt: Date,
     userId: String,
 });
 exports.BankAccount = mongoose.model("BankAccount", bankAccountSchema);

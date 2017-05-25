@@ -17,7 +17,7 @@ var xAssetSchema: Schema = new mongoose.Schema({
         currency: String,
         amount: Number
     },
-    valuationDate: Date,
+    valuationDate: String,
     description: String,
     policyNumber: String,
     yearlyIncome: {
@@ -57,7 +57,7 @@ interface IXAsset {
         currency: String,
         amount: Number
     },
-    valuationDate: Date,
+    valuationDate: String,
     description: String,
     policyNumber: String,
     yearlyIncome: {
