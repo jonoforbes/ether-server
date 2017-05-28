@@ -3,6 +3,7 @@ import { Model } from "mongoose";
 import { Schema } from "mongoose";
 
 var bankAccountSchema: Schema = new mongoose.Schema({
+    accountOwnerType: String,
     accountType: String,        // UK | Non-UK
     accountName: String,
     bankName: String,
@@ -18,6 +19,7 @@ var bankAccountSchema: Schema = new mongoose.Schema({
 })
 
 interface IBankAccount {
+    accountOwnerType: String,
     accountType: String;        // UK | Non-UK
     accountName: String;
     bankName: String;

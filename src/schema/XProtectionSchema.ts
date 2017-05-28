@@ -6,52 +6,28 @@ var xProtectionSchema: Schema = new mongoose.Schema({
     ownerType: String,              // Contact | Joint
     planType: String,               
     insurerName: String,
-    lifeSum: {
-        currency: String,
-        amount: Number
-    },
-    ciSum: {
-        currency: String,
-        amount: Number
-    },
-    afterCISum: {
-        currency: String,
-        amount: Number
-    },
+    lifeSum: Number,
+    ciSum: Number,
+    afterCISum: Number,
     deferredPeriod: Number,         // Deferred Period in Months
     benefitDuration: Number,        // Duration in Months
-    benefitAmount: {
-        currency: String,
-        amount: Number
-    },
+    benefitAmount: Number,
     benefitRate: Number,            // Percentage
     firstNameOne: String,
     firstNameTwo: String,
     lastNameOne: String,
     lastNameTwo: String,
     policyNumber: String,
-    contribution: {
-        currency: String,
-        amount: Number,
-        frequency: String           // Weekly | Monthly | Annual
-    },
-    waiver: {
-        currency: String,
-        amount: Number
-    },
+    contributionAmount: Number,
+    contributionFrequency: String,
+    waiver: Number,
     rateGuarantee: Boolean,
     addressedNeed: String,
     inTrust: Boolean,
     assignedPolicy: Boolean,
     lapr: Boolean,
-    maturityValue: {
-        currency: String,
-        amount: Number
-    },
-    valuation: {
-        currency: String,
-        amount: Number
-    },
+    maturityValue: Number,
+    valuation: Number,
     commencementDate: String,
     maturityDate: String,
     createdAt: Date,
@@ -64,52 +40,28 @@ interface IXProtection {
     ownerType: String,              // Contact | Joint
     planType: String,               
     insurerName: String,
-    lifeSum: {
-        currency: String,
-        amount: Number
-    },
-    ciSum: {
-        currency: String,
-        amount: Number
-    },
-    afterCISum: {
-        currency: String,
-        amount: Number
-    },
+    lifeSum: Number,
+    ciSum: Number,
+    afterCISum: Number,
     deferredPeriod: Number,         // Deferred Period in Months
     benefitDuration: Number,        // Duration in Months
-    benefitAmount: {
-        currency: String,
-        amount: Number
-    },
+    benefitAmount: Number,
     benefitRate: Number,            // Percentage
     firstNameOne: String,
     firstNameTwo: String,
     lastNameOne: String,
     lastNameTwo: String,
     policyNumber: String,
-    contribution: {
-        currency: String,
-        amount: Number,
-        frequency: String           // Weekly | Monthly | Annual
-    },
-    waiver: {
-        currency: String,
-        amount: Number
-    },
+    contributionAmount: Number,
+    contributionFrequency: String,
+    waiver: Number,
     rateGuarantee: Boolean,
     addressedNeed: String,
     inTrust: Boolean,
     assignedPolicy: Boolean,
     lapr: Boolean,
-    maturityValue: {
-        currency: String,
-        amount: Number
-    },
-    valuation: {
-        currency: String,
-        amount: Number
-    },
+    maturityValue: Number,
+    valuation: Number,
     commencementDate: String,
     maturityDate: String,
     createdAt: Date,

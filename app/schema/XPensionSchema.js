@@ -1,6 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
 var xPensionSchema = new mongoose.Schema({
+    ownerType: String,
     pensionType: String,
     providerName: String,
     planType: String,
@@ -12,23 +13,11 @@ var xPensionSchema = new mongoose.Schema({
     companyJoinDate: String,
     status: String,
     planRetirementAge: Number,
-    valuation: {
-        currency: String,
-        amount: Number,
-        date: String
-    },
-    taxFreeCurrentValue: {
-        currency: String,
-        amount: Number
-    },
-    employerContribution: {
-        currency: String,
-        amount: Number
-    },
-    personalContribution: {
-        currency: String,
-        amount: Number
-    },
+    valuationAmount: Number,
+    valuationDate: String,
+    taxFreeCurrentValue: Number,
+    employerContribution: Number,
+    personalContribution: Number,
     contributionFrequency: String,
     waiver: String,
     coverLevel: String,
@@ -38,17 +27,11 @@ var xPensionSchema = new mongoose.Schema({
     assetPreservationTrust: Boolean,
     contractedOut: Boolean,
     paidUpDate: String,
-    transferValue: {
-        currency: String,
-        amount: Number,
-        date: String
-    },
+    transferValue: Number,
+    transferDate: String,
     protectedRights: String,
     nonProtectedRights: String,
-    pensionableEarnings: {
-        currency: String,
-        amount: Number
-    },
+    pensionableEarnings: Number,
     pensionIncreaseRate: String,
     spousePension: String,
     dependantPension: String,

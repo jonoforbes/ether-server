@@ -13,23 +13,14 @@ var xAssetSchema: Schema = new mongoose.Schema({
     type: String,
     provider: String,
     ownerType: String,
-    valuation: {
-        currency: String,
-        amount: Number
-    },
+    valuation: Number,
     valuationDate: String,
     description: String,
     policyNumber: String,
-    yearlyIncome: {
-        currency: String,
-        amount: Number
-    },
+    yearlyIncome: Number,
     taxStatus: String,      // Gross | Net | Free
     incomeReinvested: Boolean,
-    regularContribution: {
-        currency: String,
-        amount: Number
-    },
+    regularContribution: Number,
     indexedPercentage: Number,
     premiumWaiver: Boolean,
     lapr: Boolean,
@@ -53,23 +44,14 @@ interface IXAsset {
     type: String,
     provider: String,
     ownerType: String,
-    valuation: {
-        currency: String,
-        amount: Number
-    },
+    valuation: Number,
     valuationDate: String,
     description: String,
     policyNumber: String,
-    yearlyIncome: {
-        currency: String,
-        amount: Number
-    },
+    yearlyIncome: Number,
     taxStatus: String,      // Gross | Net | Free
     incomeReinvested: Boolean,
-    regularContribution: {
-        currency: String,
-        amount: Number
-    },
+    regularContribution: Number,
     indexedPercentage: Number,
     premiumWaiver: Boolean,
     lapr: Boolean,

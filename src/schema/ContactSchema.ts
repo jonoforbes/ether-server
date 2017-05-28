@@ -14,121 +14,40 @@ var contactSchema: Schema = new mongoose.Schema({
     dateOfDeath: String,
     maritalStatus: String,
     gender: String,
-    dependants: [{
-        relationship: String,
-        name: String,
-        dateOfBirth: String,
-        dependant: Boolean,
-        dependantEndDate: Date,
-        goodHealth: Boolean
-    }],
-    health: {
-        smoker: Boolean,
-        goodHealth: Boolean,
-        goodHealthNote: String,
-        medicalConditions: Boolean,
-        conditionsNote: String
-    },
-    occupation: {
-        occupation: String,
-        title: String,
-        status: String,
-        employerName: String
-    },
-    income: {
-        tEmployment: {
-            currency: String,
-            amount: Number
-        },
-        ntEmployment: {
-            currency: String,
-            amount: Number
-        },
-        tSelfEmployedY1: {
-            currency: String,
-            amount: Number
-        },
-        ntSelfEmployedY1: {
-            currency: String,
-            amount: Number
-        },
-        tSelfEmployedY2: {
-            currency: String,
-            amount: Number
-        },
-        ntSelfEmployedY2: {
-            currency: String,
-            amount: Number
-        },
-        tPension: {
-            currency: String,
-            amount: Number
-        },
-        ntPension: {
-            currency: String,
-            amount: Number
-        },
-        tStatePension: {
-            currency: String,
-            amount: Number
-        },
-        ntStatePension: {
-            currency: String,
-            amount: Number
-        },
-        tStateBenefit: {
-            currency: String,
-            amount: Number
-        },
-        ntStateBenefit: {
-            currency: String,
-            amount: Number
-        },
-        tOther: {
-            currency: String,
-            amount: Number
-        },
-        ntOther: {
-            currency: String,
-            amount: Number
-        }
-    },
-    expenditure: {
-        monthlyPolicy: {
-            currency: String,
-            amount: Number
-        },
-        monthlyEssential: {
-            currency: String,
-            amount: Number
-        },
-        monthlyDiscretionary: {
-            currency: String,
-            amount: Number
-        }
-    },
-    emergencyFunds: {
-        available: {
-            currency: String,
-            amount: Number
-        },
-        recommended: {
-            currency: String,
-            amount: Number
-        }
-    },
-    futureCircumstances: {
-        willChange: Boolean,
-        effect: String
-    },
-    tax: {
-        rate: Number,
-        resident: Boolean,
-        domicile: Boolean,
-        residenceDate: Date,
-        ni: Number,
-        willChange: Boolean
-    },
+    smoker: Boolean,
+    goodHealth: Boolean,
+    goodHealthNote: String,
+    medicalConditions: Boolean,
+    conditionsNote: String,
+    occupation: String,
+    occupationTitle: String,
+    occupationStatus: String,
+    employerName: String,
+    tEmployment: Number,
+    ntEmployment: Number,
+    tSelfEmployedY1: Number,
+    ntSelfEmployedY1: Number,
+    tSelfEmployedY2: Number,
+    ntSelfEmployedY2: Number,
+    tPension: Number,
+    ntPension: Number,
+    tStatePension: Number,
+    ntStatePension: Number,
+    ntStateBenefit: Number,
+    tOther: Number,
+    ntOther: Number,
+    monthlyPolicyExpenditure: Number,
+    monthlyEssentialExpenditure: Number,
+    monthlyDiscretionaryExpenditure: Number,
+    emergencyFundsAvailable: Number,
+    emergencyFundsRecommended: Number,
+    futureCircumstances: String,
+    taxRate: Number,
+    taxResident: Boolean,
+    taxDomicile: Boolean,
+    taxResidenceDate: String,
+    taxNI: Number,
+    taxWillChange: Boolean,
     nationality: String,
     mobilePhone: String,
     homePhone: String,
@@ -153,122 +72,40 @@ interface IContact {
     dateOfDeath: String,
     maritalStatus: String,
     gender: String,
-
-    dependants: [{
-        relationship: String,
-        name: String,
-        dateOfBirth: String,
-        dependant: Boolean,
-        dependantEndDate: Date,
-        goodHealth: Boolean
-    }],
-    health: {
-        smoker: Boolean,
-        goodHealth: Boolean,
-        goodHealthNote: String,
-        medicalConditions: Boolean,
-        conditionsNote: String
-    },
-    occupation: {
-        occupation: String,
-        title: String,
-        status: String,
-        employerName: String
-    },
-    income: {
-        tEmployment: {
-            currency: String,
-            amount: Number
-        },
-        ntEmployment: {
-            currency: String,
-            amount: Number
-        },
-        tSelfEmployedY1: {
-            currency: String,
-            amount: Number
-        },
-        ntSelfEmployedY1: {
-            currency: String,
-            amount: Number
-        },
-        tSelfEmployedY2: {
-            currency: String,
-            amount: Number
-        },
-        ntSelfEmployedY2: {
-            currency: String,
-            amount: Number
-        },
-        tPension: {
-            currency: String,
-            amount: Number
-        },
-        ntPension: {
-            currency: String,
-            amount: Number
-        },
-        tStatePension: {
-            currency: String,
-            amount: Number
-        },
-        ntStatePension: {
-            currency: String,
-            amount: Number
-        },
-        tStateBenefit: {
-            currency: String,
-            amount: Number
-        },
-        ntStateBenefit: {
-            currency: String,
-            amount: Number
-        },
-        tOther: {
-            currency: String,
-            amount: Number
-        },
-        ntOther: {
-            currency: String,
-            amount: Number
-        }
-    },
-    expenditure: {
-        monthlyPolicy: {
-            currency: String,
-            amount: Number
-        },
-        monthlyEssential: {
-            currency: String,
-            amount: Number
-        },
-        monthlyDiscretionary: {
-            currency: String,
-            amount: Number
-        }
-    },
-    emergencyFunds: {
-        available: {
-            currency: String,
-            amount: Number
-        },
-        recommended: {
-            currency: String,
-            amount: Number
-        }
-    },
-    futureCircumstances: {
-        willChange: Boolean,
-        effect: String
-    },
-    tax: {
-        rate: Number,
-        resident: Boolean,
-        domicile: Boolean,
-        residenceDate: Date,
-        ni: Number,
-        willChange: Boolean
-    },
+    smoker: Boolean,
+    goodHealth: Boolean,
+    goodHealthNote: String,
+    medicalConditions: Boolean,
+    conditionsNote: String,
+    occupation: String,
+    occupationTitle: String,
+    occupationStatus: String,
+    employerName: String,
+    tEmployment: Number,
+    ntEmployment: Number,
+    tSelfEmployedY1: Number,
+    ntSelfEmployedY1: Number,
+    tSelfEmployedY2: Number,
+    ntSelfEmployedY2: Number,
+    tPension: Number,
+    ntPension: Number,
+    tStatePension: Number,
+    ntStatePension: Number,
+    ntStateBenefit: Number,
+    tOther: Number,
+    ntOther: Number,
+    monthlyPolicyExpenditure: Number,
+    monthlyEssentialExpenditure: Number,
+    monthlyDiscretionaryExpenditure: Number,
+    emergencyFundsAvailable: Number,
+    emergencyFundsRecommended: Number,
+    futureCircumstances: String,
+    taxRate: Number,
+    taxResident: Boolean,
+    taxDomicile: Boolean,
+    taxResidenceDate: String,
+    taxNI: Number,
+    taxWillChange: Boolean,
     nationality: String,
     mobilePhone: String,
     homePhone: String,

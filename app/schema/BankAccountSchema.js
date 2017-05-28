@@ -1,6 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
 var bankAccountSchema = new mongoose.Schema({
+    accountOwnerType: String,
     accountType: String,
     accountName: String,
     bankName: String,

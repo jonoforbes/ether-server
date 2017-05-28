@@ -4,26 +4,15 @@ var xLiabilitySchema = new mongoose.Schema({
     ownerType: String,
     lenderName: String,
     type: String,
-    initial: {
-        currency: String,
-        amount: Number
-    },
-    outstanding: {
-        currency: String,
-        amount: Number
-    },
-    payment: {
-        currency: String,
-        amount: Number,
-        frequency: String
-    },
+    initialAmount: Number,
+    outstandingAmount: Number,
+    paymentAmount: Number,
+    paymentFrequency: String,
     termRemaining: Number,
     repaymentMethod: String,
-    rate: {
-        percentage: Number,
-        type: String,
-        basisEnds: String
-    },
+    ratePercentage: Number,
+    rateType: String,
+    rateBasisEnds: String,
     policyNumber: String,
     transferable: Boolean,
     transferPenalty: String,
