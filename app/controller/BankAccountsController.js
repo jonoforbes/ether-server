@@ -13,6 +13,7 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const BankAccountSchema_1 = require("../schema/BankAccountSchema");
+const UserSchema_1 = require("../schema/UserSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -32,6 +33,28 @@ let BankAccountsController = class BankAccountsController {
             }
             console.log('setting bank accounts');
             res.send(accounts);
+        });
+    }
+    getAdmin(req, res) {
+        let userId = auth_1.handleAuth(req, res);
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return;
+            }
+            else {
+                BankAccountSchema_1.BankAccount.find({ _id: { '$ne': null } }, (error, bankAccounts) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(bankAccounts);
+                });
+            }
         });
     }
     getById(req, res) {
@@ -101,6 +124,11 @@ __decorate([
     __param(0, Params_1.Req()),
     __param(1, Params_1.Res())
 ], BankAccountsController.prototype, "get", null);
+__decorate([
+    Methods_1.Get("/admin"),
+    __param(0, Params_1.Req()),
+    __param(1, Params_1.Res())
+], BankAccountsController.prototype, "getAdmin", null);
 __decorate([
     Methods_1.Get("/:id"),
     __param(0, Params_1.Req()),

@@ -4,6 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Response, Request } from "express";
 import { ObjectID } from "mongodb";
 import { Address } from "../schema/AddressSchema";
+import { User } from "../schema/UserSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 
@@ -31,6 +32,33 @@ export class AddressesController {
             console.log('setting addresses');
             res.send(addresses);
         });
+    }
+
+    @Get("/admin")
+    public getAdmin(@Req() req: Request, @Res() res: Response): void {
+        let userId: string = handleAuth(req, res);
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return
+            }
+            else {
+                Address.find({_id: {'$ne': null}}, (error: any, addresses: any) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(addresses);
+
+                })
+                
+            }
+        })
+        
     }
 
     @Get("/:id")

@@ -4,6 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { XLiability } from "../schema/XLiabilitySchema";
+import { User } from "../schema/UserSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 var jwt: any = require("jsonwebtoken");
@@ -22,14 +23,41 @@ export class XLiabilitiesController {
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        XLiability.find({userId: new ObjectID(userId)}, (error: any, xliabilities: any) => {
+        XLiability.find({userId: new ObjectID(userId)}, (error: any, xLiabilities: any) => {
             if (error) {
                 res.send(error);
                 return;
             }
             console.log('setting existing liabilities');
-            res.send(xliabilities);
+            res.send(xLiabilities);
         });
+    }
+
+    @Get("/admin")
+    public getAdmin(@Req() req: Request, @Res() res: Response): void {
+        let userId: string = handleAuth(req, res);
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return
+            }
+            else {
+                XLiability.find({_id: {'$ne': null}}, (error: any, xLiabilities: any) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(xLiabilities);
+
+                })
+                
+            }
+        })
+        
     }
 
     @Get("/:id")

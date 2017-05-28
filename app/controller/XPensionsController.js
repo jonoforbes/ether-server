@@ -13,6 +13,7 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const XPensionSchema_1 = require("../schema/XPensionSchema");
+const UserSchema_1 = require("../schema/UserSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -32,6 +33,28 @@ let XPensionsController = class XPensionsController {
             }
             console.log('setting existing pensions');
             res.send(xPensions);
+        });
+    }
+    getAdmin(req, res) {
+        let userId = auth_1.handleAuth(req, res);
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return;
+            }
+            else {
+                XPensionSchema_1.XPension.find({ _id: { '$ne': null } }, (error, xPensions) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(xPensions);
+                });
+            }
         });
     }
     getById(req, res) {
@@ -101,6 +124,11 @@ __decorate([
     __param(0, Params_1.Req()),
     __param(1, Params_1.Res())
 ], XPensionsController.prototype, "get", null);
+__decorate([
+    Methods_1.Get("/admin"),
+    __param(0, Params_1.Req()),
+    __param(1, Params_1.Res())
+], XPensionsController.prototype, "getAdmin", null);
 __decorate([
     Methods_1.Get("/:id"),
     __param(0, Params_1.Req()),

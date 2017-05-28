@@ -13,6 +13,7 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const XLiabilitySchema_1 = require("../schema/XLiabilitySchema");
+const UserSchema_1 = require("../schema/UserSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -25,13 +26,35 @@ let XLiabilitiesController = class XLiabilitiesController {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        XLiabilitySchema_1.XLiability.find({ userId: new mongodb_1.ObjectID(userId) }, (error, xliabilities) => {
+        XLiabilitySchema_1.XLiability.find({ userId: new mongodb_1.ObjectID(userId) }, (error, xLiabilities) => {
             if (error) {
                 res.send(error);
                 return;
             }
             console.log('setting existing liabilities');
-            res.send(xliabilities);
+            res.send(xLiabilities);
+        });
+    }
+    getAdmin(req, res) {
+        let userId = auth_1.handleAuth(req, res);
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return;
+            }
+            else {
+                XLiabilitySchema_1.XLiability.find({ _id: { '$ne': null } }, (error, xLiabilities) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(xLiabilities);
+                });
+            }
         });
     }
     getById(req, res) {
@@ -101,6 +124,11 @@ __decorate([
     __param(0, Params_1.Req()),
     __param(1, Params_1.Res())
 ], XLiabilitiesController.prototype, "get", null);
+__decorate([
+    Methods_1.Get("/admin"),
+    __param(0, Params_1.Req()),
+    __param(1, Params_1.Res())
+], XLiabilitiesController.prototype, "getAdmin", null);
 __decorate([
     Methods_1.Get("/:id"),
     __param(0, Params_1.Req()),

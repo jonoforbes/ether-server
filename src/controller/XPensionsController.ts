@@ -4,6 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { XPension } from "../schema/XPensionSchema";
+import { User } from "../schema/UserSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
 var jwt: any = require("jsonwebtoken");
@@ -30,6 +31,33 @@ export class XPensionsController {
             console.log('setting existing pensions');
             res.send(xPensions);
         });
+    }
+
+    @Get("/admin")
+    public getAdmin(@Req() req: Request, @Res() res: Response): void {
+        let userId: string = handleAuth(req, res);
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return
+            }
+            else {
+                XPension.find({_id: {'$ne': null}}, (error: any, xPensions: any) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(xPensions);
+
+                })
+                
+            }
+        })
+        
     }
 
     @Get("/:id")
