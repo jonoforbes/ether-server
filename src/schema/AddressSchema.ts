@@ -37,7 +37,7 @@ interface IAddress {
     contactId: String,
     accountId: String,
     bankAccountId: String,
-    addressSince: Date,
+    addressSince: String,
     createdAt: Date,
     userId: String
 }
