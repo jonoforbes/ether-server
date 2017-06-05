@@ -9,18 +9,14 @@ var xProtectionSchema: Schema = new mongoose.Schema({
     lifeSum: Number,
     ciSum: Number,
     afterCISum: Number,
-    deferredPeriod: Number,         // Deferred Period in Months
-    benefitDuration: Number,        // Duration in Months
+    deferredPeriod: String,         // Deferred Period in Months
+    benefitDuration: String,        // Duration in Months
     benefitAmount: Number,
     benefitRate: Number,            // Percentage
-    firstNameOne: String,
-    firstNameTwo: String,
-    lastNameOne: String,
-    lastNameTwo: String,
     policyNumber: String,
     contributionAmount: Number,
     contributionFrequency: String,
-    waiver: Number,
+    waiver: Boolean,
     rateGuarantee: Boolean,
     addressedNeed: String,
     inTrust: Boolean,
@@ -43,18 +39,14 @@ interface IXProtection {
     lifeSum: Number,
     ciSum: Number,
     afterCISum: Number,
-    deferredPeriod: Number,         // Deferred Period in Months
-    benefitDuration: Number,        // Duration in Months
+    deferredPeriod: String,         // Deferred Period in Months
+    benefitDuration: String,        // Duration in Months
     benefitAmount: Number,
     benefitRate: Number,            // Percentage
-    firstNameOne: String,
-    firstNameTwo: String,
-    lastNameOne: String,
-    lastNameTwo: String,
     policyNumber: String,
     contributionAmount: Number,
     contributionFrequency: String,
-    waiver: Number,
+    waiver: Boolean,
     rateGuarantee: Boolean,
     addressedNeed: String,
     inTrust: Boolean,
