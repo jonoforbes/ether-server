@@ -42,7 +42,7 @@ export class ContactsController {
             }
             if (docs[0].role !== "admin") {
                 res.send(error);
-                return
+                return;
             }
             else {
                 Contact.find({_id: {'$ne': null}}, (error: any, contacts: any) => {
@@ -50,7 +50,10 @@ export class ContactsController {
                         res.send(error);
                         return;
                     }
-                    res.send(contacts);
+                    else {
+                        res.send(contacts);
+                    }
+                    
 
                 })
                 

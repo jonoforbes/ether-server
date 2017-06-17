@@ -4,6 +4,7 @@ import { Schema } from "mongoose";
 
 var commentSchema: Schema = new mongoose.Schema({
     content: String,
+    commentType: String,
     parentId: String,
     createdAt: Date,
     recipientId: String,
@@ -12,6 +13,7 @@ var commentSchema: Schema = new mongoose.Schema({
 
 interface IComment {
     content: String,
+    commentType: String,
     parentId: String,
     createdAt: Date,
     recipientId: String,

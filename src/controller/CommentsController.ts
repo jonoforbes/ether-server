@@ -4,6 +4,7 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { Comment } from "../schema/CommentSchema";
+import { User } from "../schema/UserSchema";
 import { ActivitiesController } from "./ActivitiesController";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
@@ -31,9 +32,38 @@ export class CommentsController {
                 res.send(error);
                 return;
             }
-            console.log('setting comments');
-            res.send(comments);
+            else {
+                console.log('setting comments');
+                res.send(comments);
+            }
         });
+    }
+
+    @Get("/admin")
+    public getAdmin(@Req() req: Request, @Res() res: Response): void {
+        let userId: string = handleAuth(req, res);
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role !== "admin") {
+                res.send(error);
+                return;
+            }
+            else {
+                Comment.find({_id: {'$ne': null}}, (error: any, comments: any) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    else {
+                        console.log('setting admin comments');
+                        res.send(comments);
+                    }
+                })
+            }
+        })
     }
 
     @Get("/:id")

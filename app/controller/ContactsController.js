@@ -52,7 +52,9 @@ let ContactsController = class ContactsController {
                         res.send(error);
                         return;
                     }
-                    res.send(contacts);
+                    else {
+                        res.send(contacts);
+                    }
                 });
             }
         });
