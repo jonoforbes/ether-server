@@ -26,6 +26,8 @@ interface IAddressModel extends IAddress, mongoose.Document {
 
 interface IAddress {
     addressType: String,
+    primaryAddress: Boolean, 
+    addressSince: String,
     longitude: Number,
     latitude: Number,
     formattedName: String,
@@ -37,7 +39,6 @@ interface IAddress {
     contactId: String,
     accountId: String,
     bankAccountId: String,
-    addressSince: String,
     createdAt: Date,
     userId: String
 }
