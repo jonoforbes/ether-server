@@ -22,8 +22,7 @@ export class AppointmentsController {
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        let queryUserId: string = new ObjectID(userId).toString();
-        Appointment.find({ $or:[ {userId: queryUserId}, {invitees: queryUserId} ]}, 
+        Appointment.find({userId: new ObjectID(userId)}, 
             (error: any, appointments: any) => {
             if (error) {
                 res.send(error);
@@ -64,27 +63,8 @@ export class AppointmentsController {
     @Get("/:id")
     public getById(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        let queryUserId: string = new ObjectID(userId).toString();
-        let queryObjectId: string = new ObjectID(req.params.id).toString();
-        console.log('user', queryUserId);
-        console.log('_id', queryObjectId);
         Appointment.find(
-                {   
-                    $or: [
-                        {
-                            $and: [
-                                {userId: queryUserId},
-                                {_id: queryObjectId}
-                            ]
-                        },
-                        {
-                            $and: [
-                                {invitees: queryUserId},
-                                {_id: queryObjectId}
-                            ]
-                        }
-                    ]    
-                }, (error: any, appointments: any) => {
+                {_id: new ObjectID(req.params.id), userId: new ObjectID(userId)}, (error: any, appointments: any) => {
             if (error) {
                 res.send(error);
                 return;

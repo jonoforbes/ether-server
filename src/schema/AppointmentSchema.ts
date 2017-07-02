@@ -4,7 +4,10 @@ import { Schema } from "mongoose";
 
 var appointmentSchema: Schema = new mongoose.Schema({
     description: {type: String, required: true},
-    invitees: [{type: String}],
+    appointmentType: String,
+    date: Date,
+    startTime: Number, // time as number from 0 - 1440
+    endTime: Number,
     contactId: String,
     saleId: String,
     accountId: String,
@@ -17,7 +20,10 @@ interface IAppointmentModel extends IAppointment, mongoose.Document{
 
 interface IAppointment {
     description: String,
-    invitees: String[],
+    appointmentType: String,
+    date: Date,
+    startTime: Number,
+    endTime: Number,
     contactId: String,
     saleId: String,
     accountId: String,

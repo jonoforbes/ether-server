@@ -2,7 +2,10 @@
 const mongoose = require("mongoose");
 var appointmentSchema = new mongoose.Schema({
     description: { type: String, required: true },
-    invitees: [{ type: String }],
+    appointmentType: String,
+    date: Date,
+    startTime: Number,
+    endTime: Number,
     contactId: String,
     saleId: String,
     accountId: String,

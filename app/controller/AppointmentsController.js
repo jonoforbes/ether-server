@@ -26,8 +26,7 @@ let AppointmentsController = class AppointmentsController {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        let queryUserId = new mongodb_1.ObjectID(userId).toString();
-        AppointmentSchema_1.Appointment.find({ $or: [{ userId: queryUserId }, { invitees: queryUserId }] }, (error, appointments) => {
+        AppointmentSchema_1.Appointment.find({ userId: new mongodb_1.ObjectID(userId) }, (error, appointments) => {
             if (error) {
                 res.send(error);
                 return;
@@ -60,26 +59,7 @@ let AppointmentsController = class AppointmentsController {
     }
     getById(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        let queryUserId = new mongodb_1.ObjectID(userId).toString();
-        let queryObjectId = new mongodb_1.ObjectID(req.params.id).toString();
-        console.log('user', queryUserId);
-        console.log('_id', queryObjectId);
-        AppointmentSchema_1.Appointment.find({
-            $or: [
-                {
-                    $and: [
-                        { userId: queryUserId },
-                        { _id: queryObjectId }
-                    ]
-                },
-                {
-                    $and: [
-                        { invitees: queryUserId },
-                        { _id: queryObjectId }
-                    ]
-                }
-            ]
-        }, (error, appointments) => {
+        AppointmentSchema_1.Appointment.find({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, (error, appointments) => {
             if (error) {
                 res.send(error);
                 return;
