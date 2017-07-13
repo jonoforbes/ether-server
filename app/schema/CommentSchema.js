@@ -8,7 +8,7 @@ var CommentPrivacy;
 })(CommentPrivacy || (CommentPrivacy = {}));
 var commentSchema = new mongoose.Schema({
     content: String,
-    privacy: CommentPrivacy,
+    privacy: Number,
     parentId: String,
     recipientId: String,
     userId: String,

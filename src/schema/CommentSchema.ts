@@ -10,7 +10,7 @@ enum CommentPrivacy {
 
 var commentSchema: Schema = new mongoose.Schema({
     content: String,
-    privacy: CommentPrivacy,
+    privacy: Number,
 
     parentId: String,
     recipientId: String,
@@ -21,7 +21,7 @@ var commentSchema: Schema = new mongoose.Schema({
 
 interface IComment {
     content: String;
-    privacy: CommentPrivacy;
+    privacy: Number;
 
     parentId: String;
     recipientId: String;
