@@ -12,7 +12,7 @@ var bankAccountSchema: Schema = new mongoose.Schema({
     sortCode: String,
     swiftCode: String,
     iban: String,
-    currency: Currency,
+    currency: Number,
 
     accountId: String,
     contactId: String,
@@ -31,7 +31,7 @@ interface IBankAccount {
     sortCode: String;
     swiftCode: String;
     iban: String;
-    currency: Currency;
+    currency: Number;
 
     accountId: String;
     contactId: String;

@@ -10,7 +10,7 @@ var xAssetSchema: Schema = new mongoose.Schema({
                             // Non-insurance Based Investment 
                             // National Savings & Investment
                             // Annuity Based Investment
-    currency: Currency,
+    currency: Number,
     type: String,
     provider: String,
     ownerType: String,
@@ -45,7 +45,7 @@ interface IXAsset {
                             // Non-insurance Based Investment 
                             // National Savings & Investment
                             // Annuity Based Investment
-    currency: Currency;
+    currency: Number;
     type: String;
     provider: String;
     ownerType: String;

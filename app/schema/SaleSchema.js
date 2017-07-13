@@ -1,13 +1,12 @@
 "use strict";
 const mongoose = require("mongoose");
-const constants_1 = require("../constants");
 var saleSchema = new mongoose.Schema({
     saleStatus: String,
     quantity: Number,
     buyPrice: Number,
     term: Number,
     description: String,
-    currency: constants_1.Currency,
+    currency: Number,
     accountId: String,
     productId: String,
     userId: String,

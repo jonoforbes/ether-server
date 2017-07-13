@@ -9,7 +9,7 @@ var saleSchema: Schema = new mongoose.Schema({
     buyPrice: Number,
     term: Number,
     description: String,
-    currency: Currency,
+    currency: Number,
 
     accountId: String,
     productId: String,
@@ -27,7 +27,7 @@ interface ISale {
     buyPrice: Number;
     term: Number;
     description: String;
-    currency: Currency;
+    currency: Number;
     
     accountId: String;
     productId: String;

@@ -27,7 +27,7 @@ var xProtectionSchema: Schema = new mongoose.Schema({
     valuation: Number,
     commencementDate: Date,
     maturityDate: Date,
-    currency: Currency,
+    currency: Number,
 
     createdAt: Date,
     contactId: String,
@@ -59,7 +59,7 @@ interface IXProtection {
     valuation: Number,
     commencementDate: Date,
     maturityDate: Date,
-    currency: Currency,
+    currency: Number,
 
     createdAt: Date,
     contactId: String,

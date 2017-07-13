@@ -1,6 +1,5 @@
 "use strict";
 const mongoose = require("mongoose");
-const constants_1 = require("../constants");
 var xPensionSchema = new mongoose.Schema({
     pensionType: String,
     providerName: String,
@@ -33,7 +32,7 @@ var xPensionSchema = new mongoose.Schema({
     pensionIncreaseRate: String,
     spousePension: String,
     dependantPension: String,
-    currency: constants_1.Currency,
+    currency: Number,
     createdAt: Date,
     contactId: String,
     accountId: String,

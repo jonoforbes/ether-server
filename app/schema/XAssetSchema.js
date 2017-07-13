@@ -1,9 +1,8 @@
 "use strict";
 const mongoose = require("mongoose");
-const constants_1 = require("../constants");
 var xAssetSchema = new mongoose.Schema({
     category: String,
-    currency: constants_1.Currency,
+    currency: Number,
     type: String,
     provider: String,
     ownerType: String,

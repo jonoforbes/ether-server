@@ -11,7 +11,7 @@ var expenditureSchema: Schema = new mongoose.Schema({
     emergencyFundsAvailable: Number,
     emergencyFundsRecommended: Number,
     futureCircumstances: Boolean,
-    currency: Currency,
+    currency: Number,
 
     contactId: String,
     accountId: String,
@@ -29,7 +29,7 @@ interface IExpenditure {
     emergencyFundsAvailable: Number;
     emergencyFundsRecommended: Number;
     futureCircumstances: Boolean;
-    currency: Currency;
+    currency: Number;
 
     contactId: String;
     accountId: String;

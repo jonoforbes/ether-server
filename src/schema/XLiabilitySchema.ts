@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 import { Currency } from "../constants";
 
 var xLiabilitySchema: Schema = new mongoose.Schema({
-    currency: Currency,
+    currency: Number,
     ownerType: String,
     lenderName: String,
     type: String,
@@ -31,7 +31,7 @@ var xLiabilitySchema: Schema = new mongoose.Schema({
 })
 
 interface IXLiability {
-    currency: Currency;
+    currency: Number;
     ownerType: String;
     lenderName: String;
     type: String;

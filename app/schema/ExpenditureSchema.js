@@ -1,6 +1,5 @@
 "use strict";
 const mongoose = require("mongoose");
-const constants_1 = require("../constants");
 var expenditureSchema = new mongoose.Schema({
     monthlyPolicyExpenditure: Number,
     monthlyEssentialExpenditure: Number,
@@ -8,7 +7,7 @@ var expenditureSchema = new mongoose.Schema({
     emergencyFundsAvailable: Number,
     emergencyFundsRecommended: Number,
     futureCircumstances: Boolean,
-    currency: constants_1.Currency,
+    currency: Number,
     contactId: String,
     accountId: String,
     userId: String,

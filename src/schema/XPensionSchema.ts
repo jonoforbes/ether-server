@@ -35,7 +35,7 @@ var xPensionSchema: Schema = new mongoose.Schema({              // = money purch
     pensionIncreaseRate: String,                ///     Pension Increase Rate
     spousePension: String,                      ///     Spouse Pension
     dependantPension: String,                   ///     Dependant Pension
-    currency: Currency,
+    currency: Number,
 
     createdAt: Date,
     contactId: String,
@@ -75,7 +75,7 @@ interface IXPension {
     pensionIncreaseRate: String,                ///     Pension Increase Rate
     spousePension: String,                      ///     Spouse Pension
     dependantPension: String,                   ///     Dependant Pension
-    currency: Currency,
+    currency: Number,
 
     createdAt: Date,
     contactId: String,

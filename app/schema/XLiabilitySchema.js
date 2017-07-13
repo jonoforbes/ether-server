@@ -1,8 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
-const constants_1 = require("../constants");
 var xLiabilitySchema = new mongoose.Schema({
-    currency: constants_1.Currency,
+    currency: Number,
     ownerType: String,
     lenderName: String,
     type: String,

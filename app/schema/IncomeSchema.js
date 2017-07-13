@@ -1,6 +1,5 @@
 "use strict";
 const mongoose = require("mongoose");
-const constants_1 = require("../constants");
 var incomeSchema = new mongoose.Schema({
     tEmployment: Number,
     ntEmployment: Number,
@@ -15,7 +14,7 @@ var incomeSchema = new mongoose.Schema({
     ntStateBenefit: Number,
     tOther: Number,
     ntOther: Number,
-    currency: constants_1.Currency,
+    currency: Number,
     contactId: String,
     accountId: String,
     userId: String,

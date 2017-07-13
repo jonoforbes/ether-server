@@ -18,7 +18,7 @@ var incomeSchema: Schema = new mongoose.Schema({
     ntStateBenefit: Number,
     tOther: Number,
     ntOther: Number,
-    currency: Currency,
+    currency: Number,
 
     contactId: String,
     accountId: String,
@@ -43,7 +43,7 @@ interface IIncome {
     ntStateBenefit: Number;
     tOther: Number;
     ntOther: Number;
-    currency: Currency;
+    currency: Number;
 
     contactId: String;
     accountId: String;
