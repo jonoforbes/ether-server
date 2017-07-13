@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
 import { Schema } from "mongoose";
+import { Currency } from "../constants";
 
 var xProtectionSchema: Schema = new mongoose.Schema({
     ownerType: String,              // Contact | Joint
@@ -24,8 +25,10 @@ var xProtectionSchema: Schema = new mongoose.Schema({
     lapr: Boolean,
     maturityValue: Number,
     valuation: Number,
-    commencementDate: String,
-    maturityDate: String,
+    commencementDate: Date,
+    maturityDate: Date,
+    currency: Currency,
+
     createdAt: Date,
     contactId: String,
     accountId: String,
@@ -54,8 +57,10 @@ interface IXProtection {
     lapr: Boolean,
     maturityValue: Number,
     valuation: Number,
-    commencementDate: String,
-    maturityDate: String,
+    commencementDate: Date,
+    maturityDate: Date,
+    currency: Currency,
+
     createdAt: Date,
     contactId: String,
     accountId: String,

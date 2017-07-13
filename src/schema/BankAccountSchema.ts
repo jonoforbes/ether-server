@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
 import { Schema } from "mongoose";
+import { Currency } from "../constants";
 
 var bankAccountSchema: Schema = new mongoose.Schema({
     accountOwnerType: String,
@@ -11,9 +12,12 @@ var bankAccountSchema: Schema = new mongoose.Schema({
     sortCode: String,
     swiftCode: String,
     iban: String,
+    currency: Currency,
+
     accountId: String,
     contactId: String,
     createdAt: Date,
+    updatedAt: Date,
     userId: String,
 
 })
@@ -27,9 +31,12 @@ interface IBankAccount {
     sortCode: String;
     swiftCode: String;
     iban: String;
+    currency: Currency;
+
     accountId: String;
     contactId: String;
     createdAt: Date;
+    updatedAt: Date;
     userId: String;
 }
 

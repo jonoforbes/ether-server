@@ -1,6 +1,8 @@
 "use strict";
 const mongoose = require("mongoose");
+const constants_1 = require("../constants");
 var xLiabilitySchema = new mongoose.Schema({
+    currency: constants_1.Currency,
     ownerType: String,
     lenderName: String,
     type: String,
@@ -16,11 +18,12 @@ var xLiabilitySchema = new mongoose.Schema({
     policyNumber: String,
     transferable: Boolean,
     transferPenalty: String,
-    reviewDate: String,
-    startDate: String,
+    reviewDate: Date,
+    startDate: Date,
     contactId: String,
     accountId: String,
     createdAt: Date,
+    updatedAt: Date,
     userId: String
 });
 exports.XLiability = mongoose.model("XLiability", xLiabilitySchema);

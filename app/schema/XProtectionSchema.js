@@ -1,5 +1,6 @@
 "use strict";
 const mongoose = require("mongoose");
+const constants_1 = require("../constants");
 var xProtectionSchema = new mongoose.Schema({
     ownerType: String,
     planType: String,
@@ -22,8 +23,9 @@ var xProtectionSchema = new mongoose.Schema({
     lapr: Boolean,
     maturityValue: Number,
     valuation: Number,
-    commencementDate: String,
-    maturityDate: String,
+    commencementDate: Date,
+    maturityDate: Date,
+    currency: constants_1.Currency,
     createdAt: Date,
     contactId: String,
     accountId: String,

@@ -1,15 +1,13 @@
 "use strict";
 const mongoose = require("mongoose");
 var activitySchema = new mongoose.Schema({
-    header: { type: String, required: true },
-    content: { type: String, required: true },
     type: String,
-    messageId: String,
-    taskId: String,
+    seen: Boolean,
+    parentId: String,
     userId: String,
     recipientId: String,
     createdAt: Date,
-    seen: Boolean
+    updatedAt: Date,
 });
 exports.Activity = mongoose.model("Activity", activitySchema);
 //# sourceMappingURL=ActivitySchema.js.map

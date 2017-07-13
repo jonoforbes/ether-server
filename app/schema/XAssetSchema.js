@@ -1,12 +1,14 @@
 "use strict";
 const mongoose = require("mongoose");
+const constants_1 = require("../constants");
 var xAssetSchema = new mongoose.Schema({
     category: String,
+    currency: constants_1.Currency,
     type: String,
     provider: String,
     ownerType: String,
     valuation: Number,
-    valuationDate: String,
+    valuationDate: Date,
     description: String,
     policyNumber: String,
     yearlyIncome: Number,
@@ -21,10 +23,11 @@ var xAssetSchema = new mongoose.Schema({
     applicationExemption: String,
     purchased: Boolean,
     inherited: Boolean,
-    createdAt: Date,
     contactId: String,
     accountId: String,
-    userId: String
+    userId: String,
+    createdAt: Date,
+    updatedAt: Date
 });
 exports.XAsset = mongoose.model("XAsset", xAssetSchema);
 //# sourceMappingURL=XAssetSchema.js.map

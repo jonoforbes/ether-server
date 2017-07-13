@@ -2,26 +2,37 @@ import * as mongoose from "mongoose";
 import { Model } from "mongoose";
 import { Schema } from "mongoose";
 
+enum CommentPrivacy {
+    Private,
+    Team,
+    Global
+}
+
 var commentSchema: Schema = new mongoose.Schema({
     content: String,
-    commentType: String,
+    privacy: CommentPrivacy,
+
     parentId: String,
-    createdAt: Date,
     recipientId: String,
-    userId: String
+    userId: String,
+    createdAt: Date,
+    updatedAt: Date,
 })
 
 interface IComment {
-    content: String,
-    commentType: String,
-    parentId: String,
-    createdAt: Date,
-    recipientId: String,
-    userId: String
+    content: String;
+    privacy: CommentPrivacy;
+
+    parentId: String;
+    recipientId: String;
+    userId: String;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 interface ICommentModel extends IComment, mongoose.Document {
 
 }
+
 
 export var Comment: Model<ICommentModel> = mongoose.model<ICommentModel>("Comment", commentSchema);

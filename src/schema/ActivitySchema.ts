@@ -3,15 +3,15 @@ import { Model } from "mongoose";
 import { Schema } from "mongoose";
 
 var activitySchema: Schema = new mongoose.Schema({
-    header: {type: String, required: true},
-    content: {type: String, required: true},
+
     type: String,
-    messageId: String,
-    taskId: String,
+    seen: Boolean,
+
+    parentId: String,
     userId: String,
     recipientId: String,
     createdAt: Date,
-    seen: Boolean
+    updatedAt: Date,
 })
 
 interface IActivityModel extends IActivity, mongoose.Document {
@@ -19,15 +19,15 @@ interface IActivityModel extends IActivity, mongoose.Document {
 }
 
 interface IActivity {
-    header: String,
-    content: String,
-    type: String,
-    messageId: String,
-    taskId: String,
-    userId: String,
-    recipientId: String,
-    createdAt: Date,
-    seen: Boolean
+
+    type: String;
+    seen: Boolean;
+
+    parentId: String;
+    userId: String;
+    recipientId: String;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export var Activity: Model<IActivityModel> = mongoose.model<IActivityModel>("Activity", activitySchema);

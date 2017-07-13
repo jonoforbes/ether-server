@@ -10,7 +10,8 @@ var appointmentSchema = new mongoose.Schema({
     saleId: String,
     accountId: String,
     userId: String,
-    createdAt: Date
+    createdAt: Date,
+    updatedAt: Date
 });
 exports.Appointment = mongoose.model("Appointment", appointmentSchema);
 //# sourceMappingURL=AppointmentSchema.js.map

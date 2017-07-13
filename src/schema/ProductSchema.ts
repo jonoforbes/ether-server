@@ -6,19 +6,23 @@ var productSchema: Schema = new mongoose.Schema({
     ticker: {type: String, required: true},
     fullName: String,
     description: String,
+
     userId: String, 
-    createdAt: Date
+    createdAt: Date,
+    updatedAt: Date
 })
 
 interface IProductModel extends IProduct, mongoose.Document{
 }
 
 interface IProduct {
-    ticker: String,
-    fullName: String,
-    description: String,
-    userId: String, 
-    createdAt: Date
+    ticker: String;
+    fullName: String;
+    description: String;
+    
+    userId: String;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export var Product: Model<IProductModel> = mongoose.model<IProductModel>("Product", productSchema);

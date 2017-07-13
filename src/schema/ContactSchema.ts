@@ -3,116 +3,49 @@ import {Model} from "mongoose";
 import {Schema} from "mongoose";
 var contactSchema: Schema = new mongoose.Schema({
 
-    contactType: String,
-
-    firstName: {type: String, required: true},
+    salutation: String,
+    preferredName: String,
+    dateOfBirth: Date,
+    firstName: String,
     middleName: String,
     lastName: String,
-    preferredName: String,
-    salutation: String,
-    dateOfBirth: String,
-    dateOfDeath: String,
-    maritalStatus: String,
     gender: String,
-    smoker: Boolean,
-    goodHealth: Boolean,
-    goodHealthNote: String,
-    medicalConditions: Boolean,
-    conditionsNote: String,
-    occupation: String,
-    occupationTitle: String,
-    occupationStatus: String,
-    employerName: String,
-    tEmployment: Number,
-    ntEmployment: Number,
-    tSelfEmployedY1: Number,
-    ntSelfEmployedY1: Number,
-    tSelfEmployedY2: Number,
-    ntSelfEmployedY2: Number,
-    tPension: Number,
-    ntPension: Number,
-    tStatePension: Number,
-    ntStatePension: Number,
-    ntStateBenefit: Number,
-    tOther: Number,
-    ntOther: Number,
-    monthlyPolicyExpenditure: Number,
-    monthlyEssentialExpenditure: Number,
-    monthlyDiscretionaryExpenditure: Number,
-    emergencyFundsAvailable: Number,
-    emergencyFundsRecommended: Number,
-    futureCircumstances: String,
-    taxRate: Number,
-    taxResident: Boolean,
-    taxDomicile: Boolean,
-    taxResidenceDate: String,
-    taxNI: Number,
-    taxWillChange: Boolean,
+    maritalStatus: String,
     nationality: String,
+
     mobilePhone: String,
     homePhone: String,
     workPhone: String,
     primaryEmail: String,
     secondaryEmail: String,
+
     accountId: String,
     userId: String,
-    createdAt: Date
+    createdAt: Date,
+    updatedAt: Date
 })
 export var Contact: Model<IContactModel> = mongoose.model<IContactModel>("Contact", contactSchema);
 interface IContactModel extends IContact, mongoose.Document {
 }
 interface IContact {
-    contactType: String,
-    firstName: String,
-    middleName: String,
-    lastName: String,
-    preferredName: String,
-    salutation: String,
-    dateOfBirth: String,
-    dateOfDeath: String,
-    maritalStatus: String,
-    gender: String,
-    smoker: Boolean,
-    goodHealth: Boolean,
-    goodHealthNote: String,
-    medicalConditions: Boolean,
-    conditionsNote: String,
-    occupation: String,
-    occupationTitle: String,
-    occupationStatus: String,
-    employerName: String,
-    tEmployment: Number,
-    ntEmployment: Number,
-    tSelfEmployedY1: Number,
-    ntSelfEmployedY1: Number,
-    tSelfEmployedY2: Number,
-    ntSelfEmployedY2: Number,
-    tPension: Number,
-    ntPension: Number,
-    tStatePension: Number,
-    ntStatePension: Number,
-    ntStateBenefit: Number,
-    tOther: Number,
-    ntOther: Number,
-    monthlyPolicyExpenditure: Number,
-    monthlyEssentialExpenditure: Number,
-    monthlyDiscretionaryExpenditure: Number,
-    emergencyFundsAvailable: Number,
-    emergencyFundsRecommended: Number,
-    futureCircumstances: String,
-    taxRate: Number,
-    taxResident: Boolean,
-    taxDomicile: Boolean,
-    taxResidenceDate: String,
-    taxNI: Number,
-    taxWillChange: Boolean,
-    nationality: String,
-    mobilePhone: String,
-    homePhone: String,
-    workPhone: String,
-    primaryEmail: String,
-    secondaryEmail: String,
-    accountId: String,
-    userId: String,
-    createdAt: Date
+    salutation: String;
+    preferredName: String;
+    dateOfBirth: String;
+    firstName: String;
+    middleName: String;
+    lastName: String;
+    gender: String;
+    maritalStatus: String;
+    nationality: String;
+
+    mobilePhone: String;
+    homePhone: String;
+    workPhone: String;
+    primaryEmail: String;
+    secondaryEmail: String;
+
+    accountId: String;
+    userId: String;
+    createdAt: Date;
+    updatedAt: Date;
 }

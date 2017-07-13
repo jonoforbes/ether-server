@@ -25,6 +25,7 @@ var clientAccountSchema = new mongoose.Schema({
     scddSentDate: Date,
     scddType: String,
     createdAt: Date,
+    updatedAt: Date,
     userId: String
 });
 exports.ClientAccount = mongoose.model("ClientAccount", clientAccountSchema);

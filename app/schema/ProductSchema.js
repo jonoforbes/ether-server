@@ -5,7 +5,8 @@ var productSchema = new mongoose.Schema({
     fullName: String,
     description: String,
     userId: String,
-    createdAt: Date
+    createdAt: Date,
+    updatedAt: Date
 });
 exports.Product = mongoose.model("Product", productSchema);
 //# sourceMappingURL=ProductSchema.js.map

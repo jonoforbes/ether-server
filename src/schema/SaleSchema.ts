@@ -1,34 +1,39 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
 import { Schema } from "mongoose";
+import { Currency } from "../constants";
 
 var saleSchema: Schema = new mongoose.Schema({
-    accountId: String,
-    contactId: String,
-    productId: String,
     saleStatus: String,
     quantity: Number,
     buyPrice: Number,
     term: Number,
     description: String,
+    currency: Currency,
+
+    accountId: String,
+    productId: String,
     userId: String, 
-    createdAt: Date
+    createdAt: Date,
+    updatedAt: Date
 })
 
 interface ISaleModel extends ISale, mongoose.Document{
 }
 
 interface ISale {
-    accountId: String,
-    contactId: String,
-    productId: String,
-    saleStatus: String,
-    quantity: Number,
-    buyPrice: Number,
-    term: Number,
-    description: String,
-    userId: String, 
-    createdAt: Date
+    saleStatus: String;
+    quantity: Number;
+    buyPrice: Number;
+    term: Number;
+    description: String;
+    currency: Currency;
+    
+    accountId: String;
+    productId: String;
+    userId: String;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export var Sale: Model<ISaleModel> = mongoose.model<ISaleModel>("Sale", saleSchema);
