@@ -116,9 +116,8 @@ AuthenticationController = __decorate([
     Controllers_1.JsonController("/api/authentication")
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;
-function findUser(userId) {
-    var user;
-    UserSchema_1.User.find({ _id: userId }, (err, resp) => {
+function isAdmin(userId) {
+    let user = UserSchema_1.User.findOne({ _id: userId }, (err, resp) => {
         if (err) {
             console.log('isAdmin error');
             return;
@@ -128,16 +127,12 @@ function findUser(userId) {
             return;
         }
         else {
-            user = resp[0];
+            return resp[0];
         }
     });
-    console.log('user in findUser', user);
-    return user;
-}
-function isAdmin(userId) {
-    var foundUser = findUser(userId);
-    console.log('foundUser in isAdmin', foundUser);
-    if (foundUser != undefined && foundUser.role === 0) {
+    let foundUser = user[0];
+    console.log('found user!', foundUser);
+    if (foundUser.role === 0) {
         return true;
     }
     else {
