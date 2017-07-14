@@ -50,7 +50,14 @@ let AuthenticationController = class AuthenticationController {
                     _id: user._id
                 }, SECRET);
                 userData["userId"] = user._id;
-                res.send({ token: token, login: req.body.login, firstName: req.body.firstName, lastName: req.body.lastName });
+                res.send({
+                    token: token,
+                    login: req.body.login,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    userId: user._id,
+                    role: user.role
+                });
                 new UserDataSchema_1.UserData(userData).save();
             });
         }));

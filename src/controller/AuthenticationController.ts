@@ -42,17 +42,23 @@ export class AuthenticationController {
                         console.log(error);
                         res.status(500).send({error: "something has gone horribly wrong"});
                         return;
-                }
-                let token: string = jwt.sign({
-                    fistName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    login: req.body.login,
-                    _id: user._id
-                }, SECRET);
-                userData["userId"] = user._id;
+                    }
+                    let token: string = jwt.sign({
+                        fistName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        login: req.body.login,
+                        _id: user._id
+                    }, SECRET);
+                    userData["userId"] = user._id;
             
-
-                    res.send({token: token, login: req.body.login, firstName: req.body.firstName, lastName: req.body.lastName});
+                    res.send({
+                        token: token, 
+                        login: req.body.login, 
+                        firstName: req.body.firstName, 
+                        lastName: req.body.lastName,
+                        userId: user._id,
+                        role: user.role
+                    });
                     new UserData(userData).save();
                 });
 		    } 
