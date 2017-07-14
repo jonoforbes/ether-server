@@ -111,7 +111,7 @@ export class AuthenticationController {
 }
 
 export function isAdmin(userId: string): Boolean {
-    let isAdmin: Boolean;
+    var isAdmin: Boolean;
     User.find({_id: userId}, (err: any, resp: Array<IUserModel>) => {
         if (err) {
             isAdmin = false;
@@ -128,7 +128,7 @@ export function isAdmin(userId: string): Boolean {
                 isAdmin = false;
             }
         }
-    });
+    })
     console.log('is admin?', isAdmin);
     return isAdmin;
 }

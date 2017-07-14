@@ -110,7 +110,7 @@ AuthenticationController = __decorate([
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;
 function isAdmin(userId) {
-    let isAdmin;
+    var isAdmin;
     UserSchema_1.User.find({ _id: userId }, (err, resp) => {
         if (err) {
             isAdmin = false;
