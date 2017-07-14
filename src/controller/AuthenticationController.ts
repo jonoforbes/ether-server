@@ -116,7 +116,7 @@ export class AuthenticationController {
     }
 }
 
-export function isAdmin(userId: string): Boolean {
+function findUser(userId: string): IUserModel {
     var user: IUserModel;
     User.find({_id: userId}, (err: any, resp: Array<IUserModel>) => {
         if (err) {
@@ -128,16 +128,20 @@ export function isAdmin(userId: string): Boolean {
             return;
         }
         else {
-            user = resp[0];
-            console.log('found User', user);
+            this.user = resp[0];
         }     
     });
-    if (user.role === 0) {
-        console.log('got an admin!');
+    console.log('user in findUser', user);
+    return user;
+}
+
+export function isAdmin(userId: string): Boolean {
+    var foundUser = findUser(userId);
+    console.log('foundUser in isAdmin', foundUser);
+    if (foundUser != undefined && foundUser.role === 0) {
         return true;
     }
     else {
         return false;
     }
-
 }
