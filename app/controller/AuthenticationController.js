@@ -110,26 +110,26 @@ AuthenticationController = __decorate([
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;
 function isAdmin(userId) {
-    var isAdmin;
+    var user;
     UserSchema_1.User.find({ _id: userId }, (err, resp) => {
         if (err) {
-            isAdmin = false;
+            console.log('isAdmin error');
+            return;
         }
         if (resp.length === 0) {
-            isAdmin = false;
+            console.log('isAdmin not found');
+            return;
         }
-        if (resp.length > 0) {
-            let user = resp[0];
-            if (user.role === 0) {
-                isAdmin = true;
-            }
-            else {
-                isAdmin = false;
-            }
+        else {
+            user = resp[0];
         }
     });
-    console.log('is admin?', isAdmin);
-    return isAdmin;
+    if (user.role === 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 exports.isAdmin = isAdmin;
 //# sourceMappingURL=AuthenticationController.js.map

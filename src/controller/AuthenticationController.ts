@@ -111,24 +111,25 @@ export class AuthenticationController {
 }
 
 export function isAdmin(userId: string): Boolean {
-    var isAdmin: Boolean;
+    var user: IUserModel;
     User.find({_id: userId}, (err: any, resp: Array<IUserModel>) => {
         if (err) {
-            isAdmin = false;
+            console.log('isAdmin error');
+            return;
         }
         if (resp.length === 0) {
-            isAdmin = false;
+            console.log('isAdmin not found');
+            return;
         }
-        if (resp.length > 0) {
-            let user: IUserModel = resp[0];
-            if (user.role === 0) {
-                isAdmin = true;
-            }
-            else {
-                isAdmin = false;
-            }
-        }
-    })
-    console.log('is admin?', isAdmin);
-    return isAdmin;
+        else {
+            user = resp[0];
+        }     
+    });
+    if (user.role === 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+
 }
