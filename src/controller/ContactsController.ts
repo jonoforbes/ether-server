@@ -6,7 +6,8 @@ import { ObjectID } from "mongodb";
 import { Contact } from "../schema/ContactSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
-import { isAdmin } from "./AuthenticationController";
+import { User } from "../schema/UserSchema";
+// import { isAdmin } from "./AuthenticationController";
 var jwt: any = require("jsonwebtoken");
 
 const DATA_CONTACTS_ADD: string = "DATA_CONTACTS_ADD";
@@ -19,57 +20,79 @@ export class ContactsController {
     constructor() {
     }
 
+    // @Get("/")
+    // public get(@Req() req: Request, @Res() res: Response): void {
+    //     let userId: string = handleAuth(req, res);
+    //     if (isAdmin(userId)) {
+    //         console.log('admin getting contacts');
+    //         Contact.find({_id: {'$ne': null}}, (error: any, contacts: any) => {
+    //             if(error) {
+    //                 res.send(error);
+    //                 return;
+    //             }
+    //             console.log('admin sent contacts');
+    //             res.send(contacts);
+    //         })
+
+    //     }
+    //     else {
+    //         console.log('not an admin');
+    //         Contact.find({userId: new ObjectID(userId)}, (error: any, contacts: any) => {
+    //         if (error) {
+    //             res.send(error);
+    //             return;
+    //         }
+    //         console.log('setting contacts');
+    //         res.send(contacts);
+    //     });
+    //     }
+    // }
+
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        if (isAdmin(userId) == true) {
-            console.log('admin getting contacts');
-            Contact.find({_id: {'$ne': null}}, (error: any, contacts: any) => {
-                if(error) {
-                    res.send(error);
-                    return;
-                }
-                console.log('admin sent contacts');
-                res.send(contacts);
-            })
-
-        }
-        else {
-            console.log('not an admin');
-            Contact.find({userId: new ObjectID(userId)}, (error: any, contacts: any) => {
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
             if (error) {
                 res.send(error);
                 return;
             }
-            console.log('setting contacts');
-            res.send(contacts);
-        });
-        }
+            if (docs[0].role === 0) {
+                console.log('admin getting contacts');
+                Contact.find({}, (error: any, contacts: any) => {
+                    if(error) {
+                        res.send(error)
+                        return
+                    }
+                    console.log('admin sent contacts')
+                    res.send(contacts)
+                })
+            }
+            else {
+                console.log('not an admin');
+                Contact.find({userId: new ObjectID(userId)}, (error: any, contacts: any) => {
+                    if (error) {
+                        res.send(error)
+                        return
+                    }
+                    console.log('setting contacts')
+                    res.send(contacts)
+                })
+            }
+        })        
     }
 
     @Get("/:id")
     public getById(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        if (isAdmin(userId)) {
-            console.log('admin getting single contact');
-            Contact.find({_id: new ObjectID(req.params.id)}, (error: any, contacts: any) => {
-              if (error) {
-                  res.send(error);
-                  return;
-              }
-              console.log('admin sent single contact');
-              res.send(contacts[0]);  
-            });
-        }
-        else {
-            Contact.find({_id: new ObjectID(req.params.id), userId: new ObjectID(userId)}, (error: any, docs: any) => {
+        
+        Contact.find({_id: new ObjectID(req.params.id), userId: new ObjectID(userId)}, (error: any, docs: any) => {
             if (error) {
                 res.send(error);
                 return;
             }
             res.send(docs[0]);
         });
-        }
+
         
     }
 

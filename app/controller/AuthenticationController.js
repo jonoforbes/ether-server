@@ -116,23 +116,4 @@ AuthenticationController = __decorate([
     Controllers_1.JsonController("/api/authentication")
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;
-function isAdmin(userId) {
-    let user = UserSchema_1.User.findOne({ _id: userId }, (err, resp) => {
-        if (err) {
-            console.log('isAdmin error');
-            return;
-        }
-        if (resp.length === 0) {
-            console.log('isAdmin not found');
-            return;
-        }
-        else {
-            return resp[0];
-        }
-    }).exec().then((user) => {
-    });
-    console.log('found user!', user);
-    return false;
-}
-exports.isAdmin = isAdmin;
 //# sourceMappingURL=AuthenticationController.js.map

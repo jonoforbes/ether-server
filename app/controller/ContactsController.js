@@ -15,7 +15,7 @@ const mongodb_1 = require("mongodb");
 const ContactSchema_1 = require("../schema/ContactSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
-const AuthenticationController_1 = require("./AuthenticationController");
+const UserSchema_1 = require("../schema/UserSchema");
 var jwt = require("jsonwebtoken");
 const DATA_CONTACTS_ADD = "DATA_CONTACTS_ADD";
 const DATA_CONTACTS_REMOVE = "DATA_CONTACTS_REMOVE";
@@ -26,51 +26,44 @@ let ContactsController = class ContactsController {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        if (AuthenticationController_1.isAdmin(userId) == true) {
-            console.log('admin getting contacts');
-            ContactSchema_1.Contact.find({ _id: { '$ne': null } }, (error, contacts) => {
-                if (error) {
-                    res.send(error);
-                    return;
-                }
-                console.log('admin sent contacts');
-                res.send(contacts);
-            });
-        }
-        else {
-            console.log('not an admin');
-            ContactSchema_1.Contact.find({ userId: new mongodb_1.ObjectID(userId) }, (error, contacts) => {
-                if (error) {
-                    res.send(error);
-                    return;
-                }
-                console.log('setting contacts');
-                res.send(contacts);
-            });
-        }
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            if (docs[0].role === 0) {
+                console.log('admin getting contacts');
+                ContactSchema_1.Contact.find({}, (error, contacts) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    console.log('admin sent contacts');
+                    res.send(contacts);
+                });
+            }
+            else {
+                console.log('not an admin');
+                ContactSchema_1.Contact.find({ userId: new mongodb_1.ObjectID(userId) }, (error, contacts) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    console.log('setting contacts');
+                    res.send(contacts);
+                });
+            }
+        });
     }
     getById(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        if (AuthenticationController_1.isAdmin(userId)) {
-            console.log('admin getting single contact');
-            ContactSchema_1.Contact.find({ _id: new mongodb_1.ObjectID(req.params.id) }, (error, contacts) => {
-                if (error) {
-                    res.send(error);
-                    return;
-                }
-                console.log('admin sent single contact');
-                res.send(contacts[0]);
-            });
-        }
-        else {
-            ContactSchema_1.Contact.find({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, (error, docs) => {
-                if (error) {
-                    res.send(error);
-                    return;
-                }
-                res.send(docs[0]);
-            });
-        }
+        ContactSchema_1.Contact.find({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+            if (error) {
+                res.send(error);
+                return;
+            }
+            res.send(docs[0]);
+        });
     }
     post(req, res) {
         let userId = auth_1.handleAuth(req, res);

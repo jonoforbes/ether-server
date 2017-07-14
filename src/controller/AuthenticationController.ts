@@ -116,33 +116,26 @@ export class AuthenticationController {
     }
 }
 
-export function isAdmin(userId: string): Boolean {
-    let user = User.findOne({_id: userId}, (err: any, resp: Array<IUserModel>) => {
-        if (err) {
-            console.log('isAdmin error');
-            return;
-        }
-        if (resp.length === 0) {
-            console.log('isAdmin not found');
-            return;
-        }
-        else {
-            return resp[0];
-        }     
-    }).exec().then((user: IUserModel) => {
-        
-    });
-    console.log('found user!', user);
-    return false;
-}
+// function findUser(userId: string): IUserModel {
+//     var user = User.findOne({_id: userId}, (err: any, resp: Array<IUserModel>) => {
+//             if (err) {
+//                 console.log('isAdmin error');
+//                 return;
+//             }
+//         if (resp.length === 0) {
+//             console.log('isAdmin not found');
+//             return;
+//         }
+//         else {
+//         }
+//     });
+//     return user[0];         
+// }
 
-// export function isAdmin(userId: string): Boolean {
-//     var foundUser = findUser(userId);
+// export function* isAdmin(userId: string) {
+//     var foundUser = yield findUser(userId);
 //     console.log('foundUser in isAdmin', foundUser);
 //     if (foundUser != undefined && foundUser.role === 0) {
 //         return true;
-//     }
-//     else {
-//         return false;
 //     }
 // }
