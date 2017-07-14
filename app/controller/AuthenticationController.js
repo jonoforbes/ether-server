@@ -122,14 +122,10 @@ function isAdmin(userId) {
         }
         else {
             user = resp[0];
+            console.log('found User', user);
         }
     });
-    if (user.role === 0) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return false;
 }
 exports.isAdmin = isAdmin;
 //# sourceMappingURL=AuthenticationController.js.map

@@ -123,13 +123,9 @@ export function isAdmin(userId: string): Boolean {
         }
         else {
             user = resp[0];
+            console.log('found User', user);
         }     
     });
-    if (user.role === 0) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return false;
 
 }
