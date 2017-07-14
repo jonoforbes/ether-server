@@ -15,18 +15,18 @@ const mongodb_1 = require("mongodb");
 const ContactSchema_1 = require("../schema/ContactSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
+const AuthenticationController_1 = require("./AuthenticationController");
 var jwt = require("jsonwebtoken");
 const DATA_CONTACTS_ADD = "DATA_CONTACTS_ADD";
 const DATA_CONTACTS_REMOVE = "DATA_CONTACTS_REMOVE";
 const DATA_CONTACTS_UPDATE = "DATA_CONTACTS_UPDATE";
 const DATA_CONTACTS_ADD_ALL = "DATA_CONTACTS_ADD_ALL";
 let ContactsController = class ContactsController {
-    constructor(auth) {
-        this.auth = auth;
+    constructor() {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        if (this.auth.isAdmin(userId) == true) {
+        if (AuthenticationController_1.isAdmin(userId) == true) {
             console.log('admin getting contacts');
             ContactSchema_1.Contact.find({ _id: { '$ne': null } }, (error, contacts) => {
                 if (error) {
@@ -51,7 +51,7 @@ let ContactsController = class ContactsController {
     }
     getById(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        if (this.auth.isAdmin(userId)) {
+        if (AuthenticationController_1.isAdmin(userId)) {
             console.log('admin getting single contact');
             ContactSchema_1.Contact.find({ _id: new mongodb_1.ObjectID(req.params.id) }, (error, contacts) => {
                 if (error) {

@@ -20,28 +20,6 @@ const SECRET = process.env.ETHER_APP_SECRET;
 let AuthenticationController = class AuthenticationController {
     constructor() {
     }
-    isAdmin(userId) {
-        let isAdmin;
-        UserSchema_1.User.find({ _id: userId }, (err, resp) => {
-            if (err) {
-                isAdmin = false;
-            }
-            if (resp.length === 0) {
-                isAdmin = false;
-            }
-            if (resp.length > 0) {
-                let user = resp[0];
-                if (user.role === 0) {
-                    isAdmin = true;
-                }
-                else {
-                    isAdmin = false;
-                }
-            }
-        });
-        console.log('is admin?', isAdmin);
-        return isAdmin;
-    }
     register(req, res) {
         var userId = '';
         var boxUserId = '';
@@ -131,4 +109,27 @@ AuthenticationController = __decorate([
     Controllers_1.JsonController("/api/authentication")
 ], AuthenticationController);
 exports.AuthenticationController = AuthenticationController;
+function isAdmin(userId) {
+    let isAdmin;
+    UserSchema_1.User.find({ _id: userId }, (err, resp) => {
+        if (err) {
+            isAdmin = false;
+        }
+        if (resp.length === 0) {
+            isAdmin = false;
+        }
+        if (resp.length > 0) {
+            let user = resp[0];
+            if (user.role === 0) {
+                isAdmin = true;
+            }
+            else {
+                isAdmin = false;
+            }
+        }
+    });
+    console.log('is admin?', isAdmin);
+    return isAdmin;
+}
+exports.isAdmin = isAdmin;
 //# sourceMappingURL=AuthenticationController.js.map

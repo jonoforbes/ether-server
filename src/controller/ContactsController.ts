@@ -6,7 +6,7 @@ import { ObjectID } from "mongodb";
 import { Contact } from "../schema/ContactSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
-import { AuthenticationController } from "./AuthenticationController";
+import { isAdmin } from "./AuthenticationController";
 var jwt: any = require("jsonwebtoken");
 
 const DATA_CONTACTS_ADD: string = "DATA_CONTACTS_ADD";
@@ -16,13 +16,13 @@ const DATA_CONTACTS_ADD_ALL: string ="DATA_CONTACTS_ADD_ALL";
 
 @JsonController("/api/contacts")
 export class ContactsController {
-    constructor(private auth: AuthenticationController) {
+    constructor() {
     }
 
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        if (this.auth.isAdmin(userId) == true) {
+        if (isAdmin(userId) == true) {
             console.log('admin getting contacts');
             Contact.find({_id: {'$ne': null}}, (error: any, contacts: any) => {
                 if(error) {
@@ -50,7 +50,7 @@ export class ContactsController {
     @Get("/:id")
     public getById(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        if (this.auth.isAdmin(userId)) {
+        if (isAdmin(userId)) {
             console.log('admin getting single contact');
             Contact.find({_id: new ObjectID(req.params.id)}, (error: any, contacts: any) => {
               if (error) {

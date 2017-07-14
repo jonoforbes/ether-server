@@ -18,29 +18,6 @@ export class AuthenticationController {
 
     }
 
-    public isAdmin(userId: string): Boolean {
-        let isAdmin: Boolean;
-        User.find({_id: userId}, (err: any, resp: Array<IUserModel>) => {
-            if (err) {
-                isAdmin = false;
-            }
-            if (resp.length === 0) {
-                isAdmin = false;
-            }
-            if (resp.length > 0) {
-                let user: IUserModel = resp[0];
-                if (user.role === 0) {
-                    isAdmin = true;
-                }
-                else {
-                    isAdmin = false;
-                }
-            }
-        });
-        console.log('is admin?', isAdmin);
-        return isAdmin;
-    }
-
     @Post("/register")
     public register(@Req()req: Request, @Res() res: Response): void {
         // console.log(req.body);
@@ -131,4 +108,27 @@ export class AuthenticationController {
             });
         });
     }
+}
+
+export function isAdmin(userId: string): Boolean {
+    let isAdmin: Boolean;
+    User.find({_id: userId}, (err: any, resp: Array<IUserModel>) => {
+        if (err) {
+            isAdmin = false;
+        }
+        if (resp.length === 0) {
+            isAdmin = false;
+        }
+        if (resp.length > 0) {
+            let user: IUserModel = resp[0];
+            if (user.role === 0) {
+                isAdmin = true;
+            }
+            else {
+                isAdmin = false;
+            }
+        }
+    });
+    console.log('is admin?', isAdmin);
+    return isAdmin;
 }
