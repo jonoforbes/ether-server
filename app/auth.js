@@ -1,4 +1,5 @@
 "use strict";
+const SECRET = process.env.ETHER_APP_SECRET;
 var jwt = require("jsonwebtoken");
 function handleAuth(req, res) {
     let token = req.header("Authorization").replace("Bearer ", "");
@@ -16,11 +17,11 @@ function getToken(req) {
 }
 exports.getToken = getToken;
 function getUserIdFromToken(token) {
-    return jwt.decode(token, "secret")._id;
+    return jwt.decode(token, SECRET)._id;
 }
 exports.getUserIdFromToken = getUserIdFromToken;
 function validate(token) {
-    return jwt.verify(token, "secret");
+    return jwt.verify(token, SECRET);
 }
 exports.validate = validate;
 //# sourceMappingURL=auth.js.map

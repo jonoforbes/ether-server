@@ -13,7 +13,6 @@ const Methods_1 = require("controllers.ts/decorator/Methods");
 const Params_1 = require("controllers.ts/decorator/Params");
 const mongodb_1 = require("mongodb");
 const ContactSchema_1 = require("../schema/ContactSchema");
-const UserSchema_1 = require("../schema/UserSchema");
 const index_1 = require("../index");
 const auth_1 = require("../auth");
 var jwt = require("jsonwebtoken");
@@ -22,52 +21,56 @@ const DATA_CONTACTS_REMOVE = "DATA_CONTACTS_REMOVE";
 const DATA_CONTACTS_UPDATE = "DATA_CONTACTS_UPDATE";
 const DATA_CONTACTS_ADD_ALL = "DATA_CONTACTS_ADD_ALL";
 let ContactsController = class ContactsController {
-    constructor() {
+    constructor(auth) {
+        this.auth = auth;
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        ContactSchema_1.Contact.find({ userId: new mongodb_1.ObjectID(userId) }, (error, contacts) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            console.log('setting contacts');
-            res.send(contacts);
-        });
-    }
-    getAdmin(req, res) {
-        let userId = auth_1.handleAuth(req, res);
-        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            if (docs[0].role !== "admin") {
-                res.send(error);
-                return;
-            }
-            else {
-                ContactSchema_1.Contact.find({ _id: { '$ne': null } }, (error, contacts) => {
-                    if (error) {
-                        res.send(error);
-                        return;
-                    }
-                    else {
-                        res.send(contacts);
-                    }
-                });
-            }
-        });
+        if (this.auth.isAdmin(userId)) {
+            console.log('admin getting contacts');
+            ContactSchema_1.Contact.find({ _id: { '$ne': null } }, (error, contacts) => {
+                if (error) {
+                    res.send(error);
+                    return;
+                }
+                console.log('admin sent contacts');
+                res.send(contacts);
+            });
+        }
+        else {
+            console.log('not an admin');
+            ContactSchema_1.Contact.find({ userId: new mongodb_1.ObjectID(userId) }, (error, contacts) => {
+                if (error) {
+                    res.send(error);
+                    return;
+                }
+                console.log('setting contacts');
+                res.send(contacts);
+            });
+        }
     }
     getById(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        ContactSchema_1.Contact.find({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, (error, docs) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            res.send(docs[0]);
-        });
+        if (this.auth.isAdmin(userId)) {
+            console.log('admin getting single contact');
+            ContactSchema_1.Contact.find({ _id: new mongodb_1.ObjectID(req.params.id) }, (error, contacts) => {
+                if (error) {
+                    res.send(error);
+                    return;
+                }
+                console.log('admin sent single contact');
+                res.send(contacts[0]);
+            });
+        }
+        else {
+            ContactSchema_1.Contact.find({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, (error, docs) => {
+                if (error) {
+                    res.send(error);
+                    return;
+                }
+                res.send(docs[0]);
+            });
+        }
     }
     post(req, res) {
         let userId = auth_1.handleAuth(req, res);
@@ -109,6 +112,7 @@ let ContactsController = class ContactsController {
         });
     }
     handleRt(userId, req, action) {
+        console.log('clientIdMap', index_1.clientIdsMap);
         if (!index_1.clientIdsMap[userId]) {
             return;
         }
@@ -126,11 +130,6 @@ __decorate([
     __param(0, Params_1.Req()),
     __param(1, Params_1.Res())
 ], ContactsController.prototype, "get", null);
-__decorate([
-    Methods_1.Get("/admin"),
-    __param(0, Params_1.Req()),
-    __param(1, Params_1.Res())
-], ContactsController.prototype, "getAdmin", null);
 __decorate([
     Methods_1.Get("/:id"),
     __param(0, Params_1.Req()),

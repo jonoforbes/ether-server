@@ -16,8 +16,30 @@ const UserDataSchema_1 = require("../schema/UserDataSchema");
 const bcrypt = require("bcrypt");
 const box_api_1 = require("../box-api");
 var jwt = require("jsonwebtoken");
+const SECRET = process.env.ETHER_APP_SECRET;
 let AuthenticationController = class AuthenticationController {
     constructor() {
+    }
+    isAdmin(userId) {
+        let isAdmin;
+        UserSchema_1.User.find({ _id: userId }, (err, resp) => {
+            if (err) {
+                isAdmin = null;
+            }
+            if (resp.length === 0) {
+                isAdmin = null;
+            }
+            if (resp.length > 0) {
+                let user = resp[0];
+                if (user.role === 0) {
+                    isAdmin = true;
+                }
+                else {
+                    isAdmin = null;
+                }
+            }
+        });
+        return isAdmin;
     }
     register(req, res) {
         var userId = '';
@@ -47,7 +69,7 @@ let AuthenticationController = class AuthenticationController {
                     lastName: req.body.lastName,
                     login: req.body.login,
                     _id: user._id
-                }, "secret");
+                }, SECRET);
                 userData["userId"] = user._id;
                 res.send({ token: token, login: req.body.login, firstName: req.body.firstName, lastName: req.body.lastName });
                 new UserDataSchema_1.UserData(userData).save();
@@ -75,7 +97,7 @@ let AuthenticationController = class AuthenticationController {
                     lastName: user.lastName,
                     login: user.login,
                     _id: user._id
-                }, "secret");
+                }, SECRET);
                 let boxAccessToken = "";
                 box_api_1.boxAdminAPIClient._session.tokenManager.getTokensJWTGrant('user', user.boxUserId, function (err, accesstokenInfo) {
                     boxAccessToken = accesstokenInfo.accessToken;

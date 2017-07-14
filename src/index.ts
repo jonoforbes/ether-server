@@ -10,6 +10,7 @@ export let clientIdsMap = new Map<string, Array<string>>();
 
 const DATABASE_URI = process.env.MONGO_URL || process.env.DATABASE_URI || process.env.MONGOLAB_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017';
 
+
 let app = express();
 
 app.use(bodyParser.json());

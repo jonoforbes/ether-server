@@ -9,13 +9,35 @@ import {UserDataController} from "./UserDataController";
 import * as bcrypt from "bcrypt";
 import { boxAdminAPIClient } from "../box-api";
 var jwt: any = require("jsonwebtoken");
-
+const SECRET: string = process.env.ETHER_APP_SECRET;
 
 
 @JsonController("/api/authentication")
 export class AuthenticationController {
     constructor() {
 
+    }
+
+    public isAdmin(userId: string): Boolean {
+        let isAdmin: Boolean;
+        User.find({_id: userId}, (err: any, resp: Array<IUserModel>) => {
+            if (err) {
+                isAdmin = null;
+            }
+            if (resp.length === 0) {
+                isAdmin = null;
+            }
+            if (resp.length > 0) {
+                let user: IUserModel = resp[0];
+                if (user.role === 0) {
+                    isAdmin = true;
+                }
+                else {
+                    isAdmin = null;
+                }
+            }
+        });
+        return isAdmin;
     }
 
     @Post("/register")
@@ -48,7 +70,7 @@ export class AuthenticationController {
                     lastName: req.body.lastName,
                     login: req.body.login,
                     _id: user._id
-                }, "secret");
+                }, SECRET);
                 userData["userId"] = user._id;
             
 
@@ -86,7 +108,7 @@ export class AuthenticationController {
                     lastName: user.lastName,
                     login: user.login,
                     _id: user._id
-                }, "secret");
+                }, SECRET);
                 let boxAccessToken: string = "";
                 boxAdminAPIClient._session.tokenManager.getTokensJWTGrant('user', user.boxUserId, function (err, accesstokenInfo) {
 

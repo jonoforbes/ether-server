@@ -4,9 +4,9 @@ import { Res, Req } from "controllers.ts/decorator/Params";
 import { Request, Response } from "express";
 import { ObjectID } from "mongodb";
 import { Contact } from "../schema/ContactSchema";
-import { User } from "../schema/UserSchema";
 import { io, clientIdsMap } from "../index";
 import { handleAuth, getToken } from "../auth";
+import { AuthenticationController } from "./AuthenticationController";
 var jwt: any = require("jsonwebtoken");
 
 const DATA_CONTACTS_ADD: string = "DATA_CONTACTS_ADD";
@@ -16,13 +16,27 @@ const DATA_CONTACTS_ADD_ALL: string ="DATA_CONTACTS_ADD_ALL";
 
 @JsonController("/api/contacts")
 export class ContactsController {
-    constructor() {
+    constructor(private auth: AuthenticationController) {
     }
 
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        Contact.find({userId: new ObjectID(userId)}, (error: any, contacts: any) => {
+        if (this.auth.isAdmin(userId)) {
+            console.log('admin getting contacts');
+            Contact.find({_id: {'$ne': null}}, (error: any, contacts: any) => {
+                if(error) {
+                    res.send(error);
+                    return;
+                }
+                console.log('admin sent contacts');
+                res.send(contacts);
+            })
+
+        }
+        else {
+            console.log('not an admin');
+            Contact.find({userId: new ObjectID(userId)}, (error: any, contacts: any) => {
             if (error) {
                 res.send(error);
                 return;
@@ -30,48 +44,33 @@ export class ContactsController {
             console.log('setting contacts');
             res.send(contacts);
         });
-    }
-
-    @Get("/admin")
-    public getAdmin(@Req() req: Request, @Res() res: Response): void {
-        let userId: string = handleAuth(req, res);
-        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            if (docs[0].role !== "admin") {
-                res.send(error);
-                return;
-            }
-            else {
-                Contact.find({_id: {'$ne': null}}, (error: any, contacts: any) => {
-                    if (error) {
-                        res.send(error);
-                        return;
-                    }
-                    else {
-                        res.send(contacts);
-                    }
-                    
-
-                })
-                
-            }
-        })
-        
+        }
     }
 
     @Get("/:id")
     public getById(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        Contact.find({_id: new ObjectID(req.params.id), userId: new ObjectID(userId)}, (error: any, docs: any) => {
+        if (this.auth.isAdmin(userId)) {
+            console.log('admin getting single contact');
+            Contact.find({_id: new ObjectID(req.params.id)}, (error: any, contacts: any) => {
+              if (error) {
+                  res.send(error);
+                  return;
+              }
+              console.log('admin sent single contact');
+              res.send(contacts[0]);  
+            });
+        }
+        else {
+            Contact.find({_id: new ObjectID(req.params.id), userId: new ObjectID(userId)}, (error: any, docs: any) => {
             if (error) {
                 res.send(error);
                 return;
             }
             res.send(docs[0]);
         });
+        }
+        
     }
 
     @Post("/")
@@ -124,6 +123,9 @@ export class ContactsController {
 
 
     private handleRt(userId: string, req: Request, action: {type: string, payload: any}): void {
+
+
+        console.log('clientIdMap', clientIdsMap);
 
         if(!clientIdsMap[userId]) {
             return;

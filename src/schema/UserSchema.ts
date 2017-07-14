@@ -10,7 +10,7 @@ export interface IUser {
     lastName: string;
     password: string;
     boxUserId: string;
-    role: string;
+    role: number;
 }
 const SALT_WORK_FACTOR: number = 10;
 let userSchema: Schema = new mongoose.Schema({
@@ -19,7 +19,7 @@ let userSchema: Schema = new mongoose.Schema({
     lastName: {type: String, required: true},
     password: {type: String, required: true},
     boxUserId: String,
-    role: String
+    role: Number
 })
 export let User: Model<IUserModel> = mongoose.model<IUserModel>("User", userSchema);
 
