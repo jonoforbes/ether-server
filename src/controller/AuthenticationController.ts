@@ -129,15 +129,11 @@ export function isAdmin(userId: string): Boolean {
         else {
             return resp[0];
         }     
+    }).exec().then((user: IUserModel) => {
+        
     });
-    let foundUser: IUserModel = user[0];
-    console.log('found user!', foundUser);
-    if (foundUser.role === 0) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    console.log('found user!', user);
+    return false;
 }
 
 // export function isAdmin(userId: string): Boolean {
