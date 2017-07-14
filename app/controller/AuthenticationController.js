@@ -24,10 +24,10 @@ let AuthenticationController = class AuthenticationController {
         let isAdmin;
         UserSchema_1.User.find({ _id: userId }, (err, resp) => {
             if (err) {
-                isAdmin = null;
+                isAdmin = false;
             }
             if (resp.length === 0) {
-                isAdmin = null;
+                isAdmin = false;
             }
             if (resp.length > 0) {
                 let user = resp[0];
@@ -35,7 +35,7 @@ let AuthenticationController = class AuthenticationController {
                     isAdmin = true;
                 }
                 else {
-                    isAdmin = null;
+                    isAdmin = false;
                 }
             }
         });

@@ -22,10 +22,10 @@ export class AuthenticationController {
         let isAdmin: Boolean;
         User.find({_id: userId}, (err: any, resp: Array<IUserModel>) => {
             if (err) {
-                isAdmin = null;
+                isAdmin = false;
             }
             if (resp.length === 0) {
-                isAdmin = null;
+                isAdmin = false;
             }
             if (resp.length > 0) {
                 let user: IUserModel = resp[0];
@@ -33,7 +33,7 @@ export class AuthenticationController {
                     isAdmin = true;
                 }
                 else {
-                    isAdmin = null;
+                    isAdmin = false;
                 }
             }
         });
