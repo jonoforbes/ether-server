@@ -132,6 +132,12 @@ export function isAdmin(userId: string): Boolean {
             console.log('found User', user);
         }     
     });
-    return false;
+    if (user.role === 0) {
+        console.log('got an admin!');
+        return true;
+    }
+    else {
+        return false;
+    }
 
 }
