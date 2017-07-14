@@ -39,6 +39,7 @@ let AuthenticationController = class AuthenticationController {
                 }
             }
         });
+        console.log('is admin?', isAdmin);
         return isAdmin;
     }
     register(req, res) {

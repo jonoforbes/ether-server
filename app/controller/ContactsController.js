@@ -26,7 +26,7 @@ let ContactsController = class ContactsController {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        if (this.auth.isAdmin(userId)) {
+        if (this.auth.isAdmin(userId) == true) {
             console.log('admin getting contacts');
             ContactSchema_1.Contact.find({ _id: { '$ne': null } }, (error, contacts) => {
                 if (error) {

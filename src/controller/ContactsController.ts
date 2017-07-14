@@ -22,7 +22,7 @@ export class ContactsController {
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        if (this.auth.isAdmin(userId)) {
+        if (this.auth.isAdmin(userId) == true) {
             console.log('admin getting contacts');
             Contact.find({_id: {'$ne': null}}, (error: any, contacts: any) => {
                 if(error) {

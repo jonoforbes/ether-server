@@ -37,6 +37,7 @@ export class AuthenticationController {
                 }
             }
         });
+        console.log('is admin?', isAdmin);
         return isAdmin;
     }
 
