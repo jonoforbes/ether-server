@@ -128,7 +128,7 @@ function findUser(userId: string): IUserModel {
             return;
         }
         else {
-            this.user = resp[0];
+            user = resp[0];
         }     
     });
     console.log('user in findUser', user);
