@@ -74,7 +74,7 @@ let ContactsController = class ContactsController {
                 return;
             }
             else {
-                this.handleRt(userId, req, { type: DATA_CONTACTS_ADD, payload: { contact: response } });
+                this.handleRt(response.userId, req, { type: DATA_CONTACTS_ADD, payload: { contact: response } });
                 this.handleAdminRt(req, { type: DATA_CONTACTS_ADD, payload: { contact: response } });
                 res.send(response);
             }
@@ -87,8 +87,9 @@ let ContactsController = class ContactsController {
                 this.post(req, res);
             }
             else {
-                console.log(response);
-                this.handleRt(userId, req, { type: DATA_CONTACTS_UPDATE, payload: { _id: response._id, contact: req.body } });
+                console.log(response.userId);
+                this.handleRt(response.userId, req, { type: DATA_CONTACTS_UPDATE, payload: { _id: response._id, contact: req.body } });
+                this.handleAdminRt(req, { type: DATA_CONTACTS_ADD, payload: { contact: response } });
                 res.send(response);
             }
         });
