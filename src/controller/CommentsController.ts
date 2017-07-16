@@ -26,17 +26,35 @@ export class CommentsController {
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
         let queryUserId: string = new ObjectID(userId).toString();
-        Comment.find({ $or:[ {userId: queryUserId}, {recipientId: queryUserId} ]}, 
-            (error: any, comments: any) => {
+        User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
             if (error) {
                 res.send(error);
                 return;
             }
-            else {
-                console.log('setting comments');
-                res.send(comments);
+            if (docs[0].role === 0) {
+                Comment.find({}, (error: any, comments: any) => {
+                    if(error) {
+                        res.send(error)
+                        return
+                    }
+
+                    res.send(comments)
+                })
             }
-        });
+            else {
+                Comment.find({ $or:[ {userId: queryUserId}, {recipientId: queryUserId} ]}, 
+                    (error: any, comments: any) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    else {
+                        res.send(comments);
+                    }
+                });
+            }
+        }) 
+        
     }
 
     @Get("/admin")
@@ -115,7 +133,8 @@ export class CommentsController {
                 return;
             }
             else {
-                this.handleRt(userId, recipientId, req, {type: DATA_COMMENTS_ADD, payload: {comment: response}});
+                this.handleRt(response.userId, response.recipientId, req, {type: DATA_COMMENTS_ADD, payload: {comment: response}});
+                this.handleAdminRt(req, {type: DATA_COMMENTS_ADD, payload: {comment: response}});
                 activitiesController.post(response, 'comment');
                 console.log('notification attempted from comment controller');
                 res.send(response);
@@ -178,6 +197,7 @@ export class CommentsController {
             }
             else {
             this.handleRt(userId, recipientId, req, {type: DATA_COMMENTS_REMOVE, payload: {_id: req.params.id}});
+            this.handleAdminRt(req, {type: DATA_COMMENTS_REMOVE, payload: {_id: req.params.id}});
             res.sendStatus(200)
             }
         });
@@ -229,6 +249,35 @@ export class CommentsController {
                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });  
         }  
+    }
+
+    private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
+        User.find({role: 0}, (error: any, docs: any) => {
+            if (error) {
+                return
+            }
+            else {
+                docs.forEach((user: any) => {
+                    if(!clientIdsMap[user._id]) {
+                        return
+                    }
+                    else {
+                        clientIdsMap[user._id]
+                            .filter((clientInfo: {clientId: string, jwtToken: string}) => {
+                                return clientInfo.jwtToken !== getToken(req);
+                            })
+                            .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
+                                io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+                            });
+                    }
+
+                })
+
+            }
+
+        })
+
+
     }
 }
 

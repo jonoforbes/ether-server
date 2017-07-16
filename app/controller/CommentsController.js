@@ -29,14 +29,30 @@ let CommentsController = class CommentsController {
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
         let queryUserId = new mongodb_1.ObjectID(userId).toString();
-        CommentSchema_1.Comment.find({ $or: [{ userId: queryUserId }, { recipientId: queryUserId }] }, (error, comments) => {
+        UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
             if (error) {
                 res.send(error);
                 return;
             }
+            if (docs[0].role === 0) {
+                CommentSchema_1.Comment.find({}, (error, comments) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(comments);
+                });
+            }
             else {
-                console.log('setting comments');
-                res.send(comments);
+                CommentSchema_1.Comment.find({ $or: [{ userId: queryUserId }, { recipientId: queryUserId }] }, (error, comments) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    else {
+                        res.send(comments);
+                    }
+                });
             }
         });
     }
@@ -106,7 +122,8 @@ let CommentsController = class CommentsController {
                 return;
             }
             else {
-                this.handleRt(userId, recipientId, req, { type: DATA_COMMENTS_ADD, payload: { comment: response } });
+                this.handleRt(response.userId, response.recipientId, req, { type: DATA_COMMENTS_ADD, payload: { comment: response } });
+                this.handleAdminRt(req, { type: DATA_COMMENTS_ADD, payload: { comment: response } });
                 activitiesController.post(response, 'comment');
                 console.log('notification attempted from comment controller');
                 res.send(response);
@@ -160,6 +177,7 @@ let CommentsController = class CommentsController {
             }
             else {
                 this.handleRt(userId, recipientId, req, { type: DATA_COMMENTS_REMOVE, payload: { _id: req.params.id } });
+                this.handleAdminRt(req, { type: DATA_COMMENTS_REMOVE, payload: { _id: req.params.id } });
                 res.sendStatus(200);
             }
         });
@@ -205,6 +223,29 @@ let CommentsController = class CommentsController {
                 index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });
         }
+    }
+    handleAdminRt(req, action) {
+        UserSchema_1.User.find({ role: 0 }, (error, docs) => {
+            if (error) {
+                return;
+            }
+            else {
+                docs.forEach((user) => {
+                    if (!index_1.clientIdsMap[user._id]) {
+                        return;
+                    }
+                    else {
+                        index_1.clientIdsMap[user._id]
+                            .filter((clientInfo) => {
+                            return clientInfo.jwtToken !== auth_1.getToken(req);
+                        })
+                            .forEach((clientInfo) => {
+                            index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+                        });
+                    }
+                });
+            }
+        });
     }
 };
 __decorate([
