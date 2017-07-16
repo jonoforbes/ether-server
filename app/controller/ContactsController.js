@@ -82,14 +82,14 @@ let ContactsController = class ContactsController {
     }
     put(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        ContactSchema_1.Contact.findOneAndUpdate({ _id: new mongodb_1.ObjectID(req.params.id), userId: new mongodb_1.ObjectID(userId) }, req.body, (error, response) => {
+        ContactSchema_1.Contact.findOneAndUpdate({ _id: new mongodb_1.ObjectID(req.params.id) }, req.body, (error, response) => {
             if (response == null) {
                 this.post(req, res);
             }
             else {
                 console.log(response.userId);
                 this.handleRt(response.userId, req, { type: DATA_CONTACTS_UPDATE, payload: { _id: response._id, contact: req.body } });
-                this.handleAdminRt(req, { type: DATA_CONTACTS_ADD, payload: { contact: response } });
+                this.handleAdminRt(req, { type: DATA_CONTACTS_UPDATE, payload: { contact: response } });
                 res.send(response);
             }
         });
@@ -119,6 +119,7 @@ let ContactsController = class ContactsController {
             .forEach((clientInfo) => {
             index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
         });
+        return;
     }
     handleAdminRt(req, action) {
         UserSchema_1.User.find({ role: 0 }, (error, docs) => {
@@ -144,6 +145,7 @@ let ContactsController = class ContactsController {
                             index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
                         });
                     }
+                    return;
                 });
             }
         });

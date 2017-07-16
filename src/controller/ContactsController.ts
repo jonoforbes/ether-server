@@ -117,14 +117,14 @@ export class ContactsController {
     @Put("/:id")
     public put(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        Contact.findOneAndUpdate({_id: new ObjectID(req.params.id), userId: new ObjectID(userId)}, req.body, (error: any, response: any) => {
+        Contact.findOneAndUpdate({_id: new ObjectID(req.params.id)}, req.body, (error: any, response: any) => {
             if (response == null) {
                 this.post(req, res);
             }
             else {
                 console.log(response.userId);
                 this.handleRt(response.userId, req, {type: DATA_CONTACTS_UPDATE, payload: {_id: response._id, contact: req.body}});
-                this.handleAdminRt(req, {type: DATA_CONTACTS_ADD, payload: {contact: response}});
+                this.handleAdminRt(req, {type: DATA_CONTACTS_UPDATE, payload: {contact: response}});
                 res.send(response);
             }
         });
@@ -162,6 +162,7 @@ export class ContactsController {
             .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });
+        return;
     }
 
     private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
@@ -188,6 +189,7 @@ export class ContactsController {
                                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
                             });
                     }
+                    return;
                 })
 
             }
