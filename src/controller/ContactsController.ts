@@ -116,18 +116,21 @@ export class ContactsController {
 
     @Put("/:id")
     public put(@Req() req: Request, @Res() res: Response): void {
+        console.log('update contact');
         let userId: string = handleAuth(req, res);
         Contact.findOneAndUpdate({_id: new ObjectID(req.params.id)}, req.body, (error: any, response: any) => {
             if (response == null) {
                 this.post(req, res);
+                return;
             }
             else {
-                console.log(response.userId);
+                console.log('response user id', response.userId);
                 this.handleRt(response.userId, req, {type: DATA_CONTACTS_UPDATE, payload: {_id: response._id, contact: req.body}});
                 this.handleAdminRt(req, {type: DATA_CONTACTS_UPDATE, payload: {contact: response}});
                 res.send(response);
+                return;
             }
-        });
+        }).exec();
     }
 
     @Delete("/:id")

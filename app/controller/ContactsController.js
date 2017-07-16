@@ -81,18 +81,21 @@ let ContactsController = class ContactsController {
         });
     }
     put(req, res) {
+        console.log('update contact');
         let userId = auth_1.handleAuth(req, res);
         ContactSchema_1.Contact.findOneAndUpdate({ _id: new mongodb_1.ObjectID(req.params.id) }, req.body, (error, response) => {
             if (response == null) {
                 this.post(req, res);
+                return;
             }
             else {
-                console.log(response.userId);
+                console.log('response user id', response.userId);
                 this.handleRt(response.userId, req, { type: DATA_CONTACTS_UPDATE, payload: { _id: response._id, contact: req.body } });
                 this.handleAdminRt(req, { type: DATA_CONTACTS_UPDATE, payload: { contact: response } });
                 res.send(response);
+                return;
             }
-        });
+        }).exec();
     }
     delete(req, res) {
         let userId = auth_1.handleAuth(req, res);
