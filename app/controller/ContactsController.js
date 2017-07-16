@@ -123,9 +123,11 @@ let ContactsController = class ContactsController {
     handleAdminRt(req, action) {
         UserSchema_1.User.find({ role: 0 }, (error, docs) => {
             if (error) {
+                console.log('no admins');
                 return;
             }
             else {
+                console.log('administrators', docs);
                 docs.forEach((user) => {
                     this.handleRt(user._id, req, action);
                 });

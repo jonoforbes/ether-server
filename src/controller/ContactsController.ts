@@ -167,9 +167,11 @@ export class ContactsController {
     private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
         User.find({role: 0}, (error: any, docs: any) => {
             if (error) {
+                console.log('no admins');
                 return;
             }
             else {
+                console.log('administrators', docs);
                 docs.forEach((user: any) => {
                     this.handleRt(user._id, req, action);
                 })
