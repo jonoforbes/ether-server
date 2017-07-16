@@ -130,7 +130,7 @@ export class ContactsController {
                 res.send(response);
                 return;
             }
-        }).exec();
+        });
     }
 
     @Delete("/:id")

@@ -95,7 +95,7 @@ let ContactsController = class ContactsController {
                 res.send(response);
                 return;
             }
-        }).exec();
+        });
     }
     delete(req, res) {
         let userId = auth_1.handleAuth(req, res);
