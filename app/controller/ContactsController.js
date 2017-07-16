@@ -134,7 +134,15 @@ let ContactsController = class ContactsController {
                         console.log(user.firstName, ' is offline');
                     }
                     else {
-                        console.log(user.lastName, ' is online!');
+                        console.log(user.firstName, ' is online!');
+                        index_1.clientIdsMap[user._id]
+                            .filter((clientInfo) => {
+                            return clientInfo.jwtToken !== auth_1.getToken(req);
+                        })
+                            .forEach((clientInfo) => {
+                            console.log('updating for ', user.firstName);
+                            index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+                        });
                     }
                 });
             }
