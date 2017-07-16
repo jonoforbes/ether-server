@@ -107,6 +107,7 @@ export class ContactsController {
             }
             else {
                 this.handleRt(userId, req, {type: DATA_CONTACTS_ADD, payload: {contact: response}});
+                this.handleAdminRt(req, {type: DATA_CONTACTS_ADD, payload: {contact: response}});
                 res.send(response);
             }
             
@@ -121,6 +122,7 @@ export class ContactsController {
                 this.post(req, res);
             }
             else {
+                console.log(response);
                 this.handleRt(userId, req, {type: DATA_CONTACTS_UPDATE, payload: {_id: response._id, contact: req.body}});
                 res.send(response);
             }
@@ -137,6 +139,7 @@ export class ContactsController {
             }
             else {
             this.handleRt(userId, req, {type: DATA_CONTACTS_REMOVE, payload: {_id: req.params.id}});
+            this.handleAdminRt(req, {type: DATA_CONTACTS_REMOVE, payload: {_id: req.params.id}});
             res.sendStatus(200);
             }
         });
@@ -148,8 +151,6 @@ export class ContactsController {
     private handleRt(userId: string, req: Request, action: {type: string, payload: any}): void {
 
 
-        console.log('clientIdMap', clientIdsMap);
-
         if(!clientIdsMap[userId]) {
             return;
         }
@@ -160,6 +161,23 @@ export class ContactsController {
             .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });
+    }
+
+    private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
+        User.find({role: 0}, (error: any, docs: any) => {
+            if (error) {
+                return;
+            }
+            else {
+                docs.forEach((user: any) => {
+                    this.handleRt(user._id, req, action);
+                })
+
+            }
+
+        })
+
+
     }
 }
 

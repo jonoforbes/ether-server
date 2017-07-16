@@ -75,6 +75,7 @@ let ContactsController = class ContactsController {
             }
             else {
                 this.handleRt(userId, req, { type: DATA_CONTACTS_ADD, payload: { contact: response } });
+                this.handleAdminRt(req, { type: DATA_CONTACTS_ADD, payload: { contact: response } });
                 res.send(response);
             }
         });
@@ -86,6 +87,7 @@ let ContactsController = class ContactsController {
                 this.post(req, res);
             }
             else {
+                console.log(response);
                 this.handleRt(userId, req, { type: DATA_CONTACTS_UPDATE, payload: { _id: response._id, contact: req.body } });
                 res.send(response);
             }
@@ -100,12 +102,12 @@ let ContactsController = class ContactsController {
             }
             else {
                 this.handleRt(userId, req, { type: DATA_CONTACTS_REMOVE, payload: { _id: req.params.id } });
+                this.handleAdminRt(req, { type: DATA_CONTACTS_REMOVE, payload: { _id: req.params.id } });
                 res.sendStatus(200);
             }
         });
     }
     handleRt(userId, req, action) {
-        console.log('clientIdMap', index_1.clientIdsMap);
         if (!index_1.clientIdsMap[userId]) {
             return;
         }
@@ -115,6 +117,18 @@ let ContactsController = class ContactsController {
         })
             .forEach((clientInfo) => {
             index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+        });
+    }
+    handleAdminRt(req, action) {
+        UserSchema_1.User.find({ role: 0 }, (error, docs) => {
+            if (error) {
+                return;
+            }
+            else {
+                docs.forEach((user) => {
+                    this.handleRt(user._id, req, action);
+                });
+            }
         });
     }
 };
