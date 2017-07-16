@@ -27,36 +27,33 @@ let ClientAccountsController = class ClientAccountsController {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        ClientAccountSchema_1.ClientAccount.find({ userId: new mongodb_1.ObjectID(userId) }, (error, clientAccounts) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            else {
-                console.log('setting accounts');
-                res.send(clientAccounts);
-                return;
-            }
-        });
-    }
-    getAdmin(req, res) {
-        let userId = auth_1.handleAuth(req, res);
         UserSchema_1.User.find({ _id: new mongodb_1.ObjectID(userId) }, (error, docs) => {
             if (error) {
                 res.send(error);
                 return;
             }
-            if (docs[0].role !== "admin") {
-                res.send(error);
-                return;
-            }
-            else {
-                ClientAccountSchema_1.ClientAccount.find({ _id: { '$ne': null } }, (error, clientAccounts) => {
+            if (docs[0].role === 0) {
+                ClientAccountSchema_1.ClientAccount.find({}, (error, clientAccounts) => {
                     if (error) {
                         res.send(error);
                         return;
                     }
-                    res.send(clientAccounts);
+                    else {
+                        res.send(clientAccounts);
+                        return;
+                    }
+                });
+            }
+            else {
+                ClientAccountSchema_1.ClientAccount.find({ userId: new mongodb_1.ObjectID(userId) }, (error, clientAccounts) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    else {
+                        res.send(clientAccounts);
+                        return;
+                    }
                 });
             }
         });
@@ -83,7 +80,8 @@ let ClientAccountsController = class ClientAccountsController {
                 return;
             }
             else {
-                this.handleRt(userId, req, { type: DATA_CLIENT_ACCOUNTS_ADD, payload: { clientAccount: response } });
+                this.handleRt(response.userId, req, { type: DATA_CLIENT_ACCOUNTS_ADD, payload: { clientAccount: response } });
+                this.handleAdminRt(req, { type: DATA_CLIENT_ACCOUNTS_ADD, payload: { clientAccount: response } });
                 res.send(response);
                 return;
             }
@@ -97,7 +95,8 @@ let ClientAccountsController = class ClientAccountsController {
                 return;
             }
             else {
-                this.handleRt(userId, req, { type: DATA_CLIENT_ACCOUNTS_UPDATE, payload: { _id: response._id, clientAccount: req.body } });
+                this.handleRt(response.userId, req, { type: DATA_CLIENT_ACCOUNTS_UPDATE, payload: { _id: response._id, clientAccount: req.body } });
+                this.handleAdminRt(req, { type: DATA_CLIENT_ACCOUNTS_UPDATE, payload: { _id: response._id, clientAccount: req.body } });
                 res.send(response);
                 return;
             }
@@ -112,6 +111,7 @@ let ClientAccountsController = class ClientAccountsController {
             }
             else {
                 this.handleRt(userId, req, { type: DATA_CLIENT_ACCOUNTS_REMOVE, payload: { _id: req.params.id } });
+                this.handleAdminRt(req, { type: DATA_CLIENT_ACCOUNTS_REMOVE, payload: { _id: req.params.id } });
                 res.sendStatus(200);
                 return;
             }
@@ -129,17 +129,35 @@ let ClientAccountsController = class ClientAccountsController {
             index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
         });
     }
+    handleAdminRt(req, action) {
+        UserSchema_1.User.find({ role: 0 }, (error, docs) => {
+            if (error) {
+                return;
+            }
+            else {
+                docs.forEach((user) => {
+                    if (!index_1.clientIdsMap[user._id]) {
+                        return;
+                    }
+                    else {
+                        index_1.clientIdsMap[user._id]
+                            .filter((clientInfo) => {
+                            return clientInfo.jwtToken !== auth_1.getToken(req);
+                        })
+                            .forEach((clientInfo) => {
+                            index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+                        });
+                    }
+                });
+            }
+        });
+    }
 };
 __decorate([
     Methods_1.Get("/"),
     __param(0, Params_1.Req()),
     __param(1, Params_1.Res())
 ], ClientAccountsController.prototype, "get", null);
-__decorate([
-    Methods_1.Get("/admin"),
-    __param(0, Params_1.Req()),
-    __param(1, Params_1.Res())
-], ClientAccountsController.prototype, "getAdmin", null);
 __decorate([
     Methods_1.Get("/:id"),
     __param(0, Params_1.Req()),

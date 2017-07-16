@@ -116,7 +116,6 @@ export class ContactsController {
 
     @Put("/:id")
     public put(@Req() req: Request, @Res() res: Response): void {
-        console.log('update contact');
         let userId: string = handleAuth(req, res);
         Contact.findOneAndUpdate({_id: new ObjectID(req.params.id)}, req.body, (error: any, response: any) => {
             if (response == null) {
@@ -124,9 +123,8 @@ export class ContactsController {
                 return;
             }
             else {
-                console.log('response user id', response.userId);
                 this.handleRt(response.userId, req, {type: DATA_CONTACTS_UPDATE, payload: {_id: response._id, contact: req.body}});
-                this.handleAdminRt(req, {type: DATA_CONTACTS_UPDATE, payload: {contact: response}});
+                this.handleAdminRt(req, {type: DATA_CONTACTS_UPDATE, payload: {_id: response._id, contact: req.body}});
                 res.send(response);
                 return;
             }
@@ -153,8 +151,6 @@ export class ContactsController {
 
 
     private handleRt(userId: string, req: Request, action: {type: string, payload: any}): void {
-
-
         if(!clientIdsMap[userId]) {
             return;
         }
@@ -171,28 +167,23 @@ export class ContactsController {
     private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
         User.find({role: 0}, (error: any, docs: any) => {
             if (error) {
-                console.log('no admins');
-                return;
+                return
             }
             else {
-                console.log('administrators', docs);
                 docs.forEach((user: any) => {
-                    console.log('checking', user.firstName)
                     if(!clientIdsMap[user._id]) {
-                        console.log(user.firstName, ' is offline');
+                        return
                     }
                     else {
-                        console.log(user.firstName, ' is online!');
                         clientIdsMap[user._id]
                             .filter((clientInfo: {clientId: string, jwtToken: string}) => {
                                 return clientInfo.jwtToken !== getToken(req);
                             })
                             .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
-                                console.log('updating for ', user.firstName);
                                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
                             });
                     }
-                    return;
+
                 })
 
             }

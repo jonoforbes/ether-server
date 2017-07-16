@@ -81,7 +81,6 @@ let ContactsController = class ContactsController {
         });
     }
     put(req, res) {
-        console.log('update contact');
         let userId = auth_1.handleAuth(req, res);
         ContactSchema_1.Contact.findOneAndUpdate({ _id: new mongodb_1.ObjectID(req.params.id) }, req.body, (error, response) => {
             if (response == null) {
@@ -89,9 +88,8 @@ let ContactsController = class ContactsController {
                 return;
             }
             else {
-                console.log('response user id', response.userId);
                 this.handleRt(response.userId, req, { type: DATA_CONTACTS_UPDATE, payload: { _id: response._id, contact: req.body } });
-                this.handleAdminRt(req, { type: DATA_CONTACTS_UPDATE, payload: { contact: response } });
+                this.handleAdminRt(req, { type: DATA_CONTACTS_UPDATE, payload: { _id: response._id, contact: req.body } });
                 res.send(response);
                 return;
             }
@@ -127,28 +125,22 @@ let ContactsController = class ContactsController {
     handleAdminRt(req, action) {
         UserSchema_1.User.find({ role: 0 }, (error, docs) => {
             if (error) {
-                console.log('no admins');
                 return;
             }
             else {
-                console.log('administrators', docs);
                 docs.forEach((user) => {
-                    console.log('checking', user.firstName);
                     if (!index_1.clientIdsMap[user._id]) {
-                        console.log(user.firstName, ' is offline');
+                        return;
                     }
                     else {
-                        console.log(user.firstName, ' is online!');
                         index_1.clientIdsMap[user._id]
                             .filter((clientInfo) => {
                             return clientInfo.jwtToken !== auth_1.getToken(req);
                         })
                             .forEach((clientInfo) => {
-                            console.log('updating for ', user.firstName);
                             index_1.io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
                         });
                     }
-                    return;
                 });
             }
         });

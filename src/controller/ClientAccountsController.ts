@@ -23,44 +23,36 @@ export class ClientAccountsController {
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        ClientAccount.find({userId: new ObjectID(userId)}, (error: any, clientAccounts: any) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            else {
-                console.log('setting accounts');
-                res.send(clientAccounts);
-                return;
-            }
-            
-        });
-    }
-
-    @Get("/admin")
-    public getAdmin(@Req() req: Request, @Res() res: Response): void {
-        let userId: string = handleAuth(req, res);
         User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
             if (error) {
                 res.send(error);
                 return;
             }
-            if (docs[0].role !== "admin") {
-                res.send(error);
-                return
+            if (docs[0].role === 0) {
+                ClientAccount.find({}, (error: any, clientAccounts: any) => {
+                    if(error) {
+                        res.send(error)
+                        return
+                    }
+                    else {
+                        res.send(clientAccounts)
+                        return
+                    }
+                })
             }
             else {
-                ClientAccount.find({_id: {'$ne': null}}, (error: any, clientAccounts: any) => {
+                ClientAccount.find({userId: new ObjectID(userId)}, (error: any, clientAccounts: any) => {
                     if (error) {
                         res.send(error);
                         return;
                     }
-                    res.send(clientAccounts);
-
-                })
-                
+                    else {
+                        res.send(clientAccounts);
+                        return;
+                    }
+                });
             }
-        })
+        }) 
         
     }
 
@@ -90,7 +82,8 @@ export class ClientAccountsController {
                 return;
             }
             else {
-                this.handleRt(userId, req, {type: DATA_CLIENT_ACCOUNTS_ADD, payload: {clientAccount: response}});
+                this.handleRt(response.userId, req, {type: DATA_CLIENT_ACCOUNTS_ADD, payload: {clientAccount: response}});
+                this.handleAdminRt(req, {type: DATA_CLIENT_ACCOUNTS_ADD, payload: {clientAccount: response}});
                 res.send(response);
                 return;
             }
@@ -106,7 +99,8 @@ export class ClientAccountsController {
                 return;
             }
             else {
-                this.handleRt(userId, req, {type: DATA_CLIENT_ACCOUNTS_UPDATE, payload: {_id: response._id, clientAccount: req.body}});
+                this.handleRt(response.userId, req, {type: DATA_CLIENT_ACCOUNTS_UPDATE, payload: {_id: response._id, clientAccount: req.body}});
+                this.handleAdminRt(req, {type: DATA_CLIENT_ACCOUNTS_UPDATE, payload: {_id: response._id, clientAccount: req.body}});
                 res.send(response);
                 return;
             }
@@ -123,6 +117,7 @@ export class ClientAccountsController {
             }
             else {
                 this.handleRt(userId, req, {type: DATA_CLIENT_ACCOUNTS_REMOVE, payload: {_id: req.params.id}});
+                this.handleAdminRt(req, {type: DATA_CLIENT_ACCOUNTS_REMOVE, payload: {_id: req.params.id}});
                 res.sendStatus(200);
                 return;
             }
@@ -142,6 +137,37 @@ export class ClientAccountsController {
             .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });
+    }
+
+    private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
+        User.find({role: 0}, (error: any, docs: any) => {
+            if (error) {
+                return
+            }
+            else {
+
+                docs.forEach((user: any) => {
+
+                    if(!clientIdsMap[user._id]) {
+                        return
+                    }
+                    else {
+                        clientIdsMap[user._id]
+                            .filter((clientInfo: {clientId: string, jwtToken: string}) => {
+                                return clientInfo.jwtToken !== getToken(req);
+                            })
+                            .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
+                                io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+                            });
+                    }
+
+                })
+
+            }
+
+        })
+
+
     }
 
 }
