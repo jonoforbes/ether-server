@@ -22,7 +22,7 @@ export class UserDataController {
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
 
-        UserData.find({userId: {'$ne': new ObjectID(userId)}}, (error: any, users: any) => {
+        UserData.find({}, (error: any, users: any) => {
             if (error) {
                 res.send(error);
                 return;

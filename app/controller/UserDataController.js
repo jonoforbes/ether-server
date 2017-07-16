@@ -25,7 +25,7 @@ let UserDataController = class UserDataController {
     }
     get(req, res) {
         let userId = auth_1.handleAuth(req, res);
-        UserDataSchema_1.UserData.find({ userId: { '$ne': new mongodb_1.ObjectID(userId) } }, (error, users) => {
+        UserDataSchema_1.UserData.find({}, (error, users) => {
             if (error) {
                 res.send(error);
                 return;
