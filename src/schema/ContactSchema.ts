@@ -30,7 +30,7 @@ interface IContactModel extends IContact, mongoose.Document {
 interface IContact {
     salutation: String;
     preferredName: String;
-    dateOfBirth: String;
+    dateOfBirth: Date;
     firstName: String;
     middleName: String;
     lastName: String;

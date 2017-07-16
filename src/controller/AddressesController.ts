@@ -24,41 +24,31 @@ export class AddressesController {
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        Address.find({userId: new ObjectID(userId)}, (error: any, addresses: any) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            console.log('setting addresses');
-            res.send(addresses);
-        });
-    }
-
-    @Get("/admin")
-    public getAdmin(@Req() req: Request, @Res() res: Response): void {
-        let userId: string = handleAuth(req, res);
         User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
             if (error) {
                 res.send(error);
                 return;
             }
-            if (docs[0].role !== "admin") {
-                res.send(error);
-                return
-            }
-            else {
-                Address.find({_id: {'$ne': null}}, (error: any, addresses: any) => {
+            if (docs[0].role === 0) {
+
+                Address.find({}, (error: any, addresses: any) => {
                     if (error) {
                         res.send(error);
                         return;
                     }
                     res.send(addresses);
-
-                })
-                
+                });
             }
-        })
-        
+            else {
+                Address.find({userId: new ObjectID(userId)}, (error: any, addresses: any) => {
+                    if (error) {
+                        res.send(error);
+                        return;
+                    }
+                    res.send(addresses);
+                });
+            }
+        })        
     }
 
     @Get("/:id")
@@ -75,7 +65,7 @@ export class AddressesController {
     }
 
     @Post("/")
-    public postMessage(@Req() req: Request, @Res() res: Response): void {
+    public post(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
         req.body.userId = userId;
         new Address(req.body).save((error: any, response: any) => {
@@ -84,7 +74,8 @@ export class AddressesController {
                 return;
             }
             else {
-                this.handleRt(userId, req, {type: DATA_ADDRESSES_ADD, payload: {address: response}});
+                this.handleRt(response.userId, req, {type: DATA_ADDRESSES_ADD, payload: {address: response}});
+                this.handleAdminRt(req, {type: DATA_ADDRESSES_ADD, payload: {address: response}});
                 res.send(response);
             }
         });
@@ -95,10 +86,11 @@ export class AddressesController {
         let userId: string = handleAuth(req, res);
         Address.findOneAndUpdate({_id: new ObjectID(req.params.id), userId: new ObjectID(userId)}, req.body, (error: any, response: any) => {
             if (response == null) {
-                this.postMessage(req, res);
+                this.post(req, res);
             }
             else {
-                this.handleRt(userId, req, {type: DATA_ADDRESSES_UPDATE, payload: {_id: response._id, address: req.body}});
+                this.handleRt(response.userId, req, {type: DATA_ADDRESSES_UPDATE, payload: {_id: response._id, address: req.body}});
+                this.handleAdminRt(req, {type: DATA_ADDRESSES_UPDATE, payload: {_id: response._id, address: req.body}});
                 res.send(response);
             }
         });
@@ -114,6 +106,7 @@ export class AddressesController {
             }
             else {
                 this.handleRt(userId, req, {type: DATA_ADDRESSES_REMOVE, payload: {_id: req.params.id}});
+                this.handleAdminRt(req, {type: DATA_ADDRESSES_REMOVE, payload: {_id: req.params.id}});
                 res.sendStatus(200);
             }
         });
@@ -131,5 +124,34 @@ export class AddressesController {
             .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });
+    }
+
+    private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
+        User.find({role: 0}, (error: any, docs: any) => {
+            if (error) {
+                return
+            }
+            else {
+                docs.forEach((user: any) => {
+                    if(!clientIdsMap[user._id]) {
+                        return
+                    }
+                    else {
+                        clientIdsMap[user._id]
+                            .filter((clientInfo: {clientId: string, jwtToken: string}) => {
+                                return clientInfo.jwtToken !== getToken(req);
+                            })
+                            .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
+                                io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+                            });
+                    }
+
+                })
+
+            }
+
+        })
+
+
     }
 }

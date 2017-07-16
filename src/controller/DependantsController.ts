@@ -23,41 +23,31 @@ export class DependantsController {
     @Get("/")
     public get(@Req() req: Request, @Res() res: Response): void {
         let userId: string = handleAuth(req, res);
-        Dependant.find({userId: new ObjectID(userId)}, (error: any, dependants: any) => {
-            if (error) {
-                res.send(error);
-                return;
-            }
-            console.log('setting dependants');
-            res.send(dependants);
-        });
-    }
-
-    @Get("/admin")
-    public getAdmin(@Req() req: Request, @Res() res: Response): void {
-        let userId: string = handleAuth(req, res);
         User.find({_id: new ObjectID(userId)}, (error: any, docs: any) => {
             if (error) {
                 res.send(error);
-                return;
-            }
-            if (docs[0].role !== "admin") {
-                res.send(error);
                 return
             }
-            else {
-                Dependant.find({_id: {'$ne': null}}, (error: any, dependants: any) => {
+            if (docs[0].role === 0) {
+                Dependant.find({}, (error: any, dependants: any) => {
                     if (error) {
-                        res.send(error);
-                        return;
+                        res.send(error)
+                        return
                     }
-                    res.send(dependants);
-
-                })
-                
+                    res.send(dependants)
+                });
             }
-        })
-        
+            else {
+                Dependant.find({userId: new ObjectID(userId)}, (error: any, dependants: any) => {
+                    if (error) {
+                        res.send(error)
+                        return
+                    }
+                    res.send(dependants)
+                });
+            }
+        })   
+
     }
 
     @Get("/:id")
@@ -83,6 +73,7 @@ export class DependantsController {
             }
             else {
                 this.handleRt(userId, req, {type: DATA_DEPENDANTS_ADD, payload: {dependant: response}});
+                this.handleAdminRt(req, {type: DATA_DEPENDANTS_ADD, payload: {dependant: response}});
                 res.send(response);
             }
             
@@ -98,6 +89,7 @@ export class DependantsController {
             }
             else {
                 this.handleRt(userId, req, {type: DATA_DEPENDANTS_UPDATE, payload: {_id: response._id, dependant: req.body}});
+                this.handleAdminRt(req, {type: DATA_DEPENDANTS_UPDATE, payload: {_id: response._id, dependant: req.body}});
                 res.send(response);
             }
         });
@@ -113,6 +105,7 @@ export class DependantsController {
             }
             else {
             this.handleRt(userId, req, {type: DATA_DEPENDANTS_REMOVE, payload: {_id: req.params.id}});
+            this.handleAdminRt(req, {type: DATA_DEPENDANTS_REMOVE, payload: {_id: req.params.id}});
             res.sendStatus(200);
             }
         });
@@ -130,5 +123,36 @@ export class DependantsController {
             .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
                 io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
             });
+    }
+
+    private 
+
+    private handleAdminRt(req: Request, action: {type: string, payload: any}): void {
+        User.find({role: 0}, (error: any, docs: any) => {
+            if (error) {
+                return
+            }
+            else {
+                docs.forEach((user: any) => {
+                    if(!clientIdsMap[user._id]) {
+                        return
+                    }
+                    else {
+                        clientIdsMap[user._id]
+                            .filter((clientInfo: {clientId: string, jwtToken: string}) => {
+                                return clientInfo.jwtToken !== getToken(req);
+                            })
+                            .forEach((clientInfo: {clientId: string, jwtToken: string}) => {
+                                io.to('/#' + clientInfo.clientId).emit("UPDATE_REDUX", action);
+                            });
+                    }
+
+                })
+
+            }
+
+        })
+
+
     }
 }
