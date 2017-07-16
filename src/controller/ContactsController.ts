@@ -173,7 +173,13 @@ export class ContactsController {
             else {
                 console.log('administrators', docs);
                 docs.forEach((user: any) => {
-                    this.handleRt(user._id, req, action);
+                    console.log('checking', user.firstName)
+                    if(!clientIdsMap[user._id]) {
+                        console.log(user.firstName, ' is offline');
+                    }
+                    else {
+                        console.log(user.lastName, ' is online!');
+                    }
                 })
 
             }
